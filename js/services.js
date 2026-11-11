@@ -1,61 +1,35 @@
 /* ============================================================
-   CLARÉ — CAPA DE INTEGRACIÓN (catalogApi / ordersApi)
-   La UI nunca habla con Apps Script directamente: pasa por acá.
-   NO usa google.script.run (la tienda vive en Netlify).
+   MOONDOS — CAPA DE INTEGRACIÓN CON EL PANEL (catálogo y pedidos)
+   Contrato: GUIA_conexion_web_panel (iNGENIA). GET ?action=tienda y GET ?action=crearPedido&payload=…
+   Nunca se manda 'application/json' ni 'no-cors'; la confirmación se muestra solo con ok:true.
    ============================================================ */
 (function () {
-  var CFG = window.CLARE_CONFIG;
-
-  // ---------- Validación de configuración ----------
-  // En producción no se deja arrancar con valores demo / vacíos.
-  function missingConfig() {
-    var m = [];
-    if (CFG.STORE_MODE === 'produccion') {
-      if (!CFG.GAS_WEB_APP_URL) m.push('GAS_WEB_APP_URL (URL del Web App de Apps Script)');
-      if (!CFG.WHATSAPP_PHONE_E164) m.push('WHATSAPP_PHONE_E164 (número en formato internacional)');
-      if (CFG.CATALOG_SOURCE === 'fixtures') m.push('CATALOG_SOURCE (catálogo real aprobado; hoy son datos demo)');
-    }
-    return m;
+  var CFG = window.MD_CONFIG;
+  function timeout(ms) { var c = new AbortController(); var t = setTimeout(function () { c.abort(); }, ms); return { signal: c.signal, done: function () { clearTimeout(t); } }; }
+  function getJson(url, ms) {
+    var t = timeout(ms);
+    return fetch(url, { signal: t.signal, credentials: 'omit' }).then(function (r) { t.done(); return r.json(); }, function (e) { t.done(); throw e; });
   }
-
-  // ---------- Catálogo ----------
-  // Devuelve { products, categories, collections, needs, articles, faq }.
   var catalogApi = {
+    // Devuelve { resp, live }. live=false => catálogo de ejemplo (sin pedidos al panel).
     load: function () {
-      if (CFG.CATALOG_SOURCE === 'fixtures') return Promise.resolve(window.CLARE_DATA);
-      // PENDIENTE: mecanismo público de lectura del catálogo real (solo campos públicos de productos activos:
-      // id, slug, nombre, descripción aprobada, categoría, precio, fotos, variantes públicas, estado).
-      // No exponer costos, observaciones internas, datos de clientes ni stock reservado.
-      return Promise.reject(new Error('CATALOG_SOURCE "' + CFG.CATALOG_SOURCE + '" todavía no está implementado.'));
+      var fx = window.MD_FIXTURES;
+      if (!CFG.PANEL_URL) return Promise.resolve({ resp: fx, live: false, reason: 'sin-panel' });
+      return getJson(CFG.PANEL_URL + '?action=tienda', 20000).then(function (d) {
+        if (d && d.ok && Array.isArray(d.productos) && d.productos.length) return { resp: d, live: true };
+        return { resp: fx, live: false, reason: 'panel-vacio' };
+      }).catch(function (e) {
+        if (window.console) console.warn('[MOONDOS] No se pudo leer el panel, uso el catálogo de ejemplo.', e);
+        return { resp: fx, live: false, reason: 'sin-conexion' };
+      });
     }
   };
-
-  // ---------- Pedidos ----------
-  // Contrato lógico (ver spec §12). Texto plano (JSON serializado) para evitar el preflight CORS de Apps Script.
   var ordersApi = {
-    isLive: function () { return !!CFG.GAS_WEB_APP_URL; },
-
-    // Encola el pedido sin esperar respuesta. Devuelve { mode, queued }.
-    // 'queued' = el navegador aceptó el envío; NO significa que Apps Script lo procesó (sendBeacon no da acuse).
-    enqueue: function (payload) {
-      var body = JSON.stringify(payload); // string => text/plain, sin Content-Type: application/json
-      if (!CFG.GAS_WEB_APP_URL) {
-        // Adaptador demo: no sale nada de la máquina del visitante.
-        if (window.console && console.info) console.info('[Claré demo] Pedido NO enviado (falta GAS_WEB_APP_URL). Payload:', payload);
-        return { mode: 'demo-simulado', queued: false };
-      }
-      var ok = false;
-      try { ok = !!(navigator.sendBeacon && navigator.sendBeacon(CFG.GAS_WEB_APP_URL, body)); } catch (e) { ok = false; }
-      if (!ok) {
-        // Alternativa única: fetch keepalive, texto plano, sin esperar respuesta.
-        try {
-          fetch(CFG.GAS_WEB_APP_URL, { method: 'POST', body: body, keepalive: true, mode: 'no-cors', credentials: 'omit' }).catch(function () {});
-          ok = true;
-        } catch (e) { ok = false; }
-      }
-      return { mode: 'beacon', queued: ok };
+    // payload ya con la forma del panel. Devuelve una promesa con { ok, numero, total, ... } | { ok:false, code, mensaje, campos }.
+    send: function (payload) {
+      var url = CFG.PANEL_URL + '?action=crearPedido&payload=' + encodeURIComponent(JSON.stringify(payload));
+      return getJson(url, 30000).catch(function () { return { ok: false, code: 'RED', mensaje: 'No pudimos conectar. Revisá tu internet y probá de nuevo.' }; });
     }
   };
-
-  window.CLARE_SERVICES = { catalogApi: catalogApi, ordersApi: ordersApi, missingConfig: missingConfig };
+  window.MD_SERVICES = { catalogApi: catalogApi, ordersApi: ordersApi };
 })();

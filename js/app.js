@@ -1,5 +1,5 @@
 /* ============================================================
-   CLARÉ — ARRANQUE Y "CHROME" DEL SITIO (cabecera, menús, búsqueda, mini carrito, footer)
+   MOONDOS — ARRANQUE Y "CHROME" DEL SITIO (cabecera, menús, búsqueda, mini carrito, footer)
    ============================================================ */
 (function () {
   'use strict';
@@ -39,8 +39,8 @@
       if (c.subcategories.length) out += '<ul class="m-sub">' + c.subcategories.map(function (s) { return '<li><a' + link('/' + c.slug + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('') + '</ul>';
       out += '</div>';
     });
-    out += '<div class="m-group"><a class="m-link"' + link('/inspiracion') + '>Inspiración</a></div>';
-    out += '<div class="m-group m-extra"><a' + link('/por-etapa') + '>Por etapa</a><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
+    out += '<div class="m-group"><a class="m-link"' + link('/ideas') + '>Ideas para regalar</a></div>';
+    out += '<div class="m-group m-extra"><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
     return out;
   }
   function openMenu(opener) {
@@ -84,7 +84,7 @@
       mini.innerHTML = '<p class="mini-empty">Tu carrito está vacío.</p><div class="mini-actions"><button type="button" class="btn btn-soft btn-small" data-mini-close>Seguir comprando</button></div>';
     } else {
       mini.innerHTML = '<h2 class="sr-only">Carrito</h2><ul class="mini-lines">' + lines.map(function (l) {
-        return '<li><img src="' + esc(l.p.images[0].url) + '" alt="" width="56" height="56"><div><p class="n">' + esc(l.p.name) + '</p><p class="q">' + l.qty + ' × ' + fmt(l.p.priceARS) + '</p></div><p class="t">' + fmt(l.line) + '</p></li>';
+        return '<li><img src="' + esc(l.p.images[0].url) + '" alt="" width="56" height="56"><div><p class="n">' + esc(l.name) + '</p><p class="q">' + l.qty + ' × ' + fmt(l.unit) + '</p></div><p class="t">' + fmt(l.line) + '</p></li>';
       }).join('') + '</ul><p class="mini-sub"><span>Subtotal</span><strong>' + fmt(sub) + '</strong></p>' +
         '<div class="mini-actions"><a class="btn btn-small"' + link('/carrito') + '>Ver carrito</a><button type="button" class="btn btn-soft btn-small" data-mini-close>Seguir comprando</button></div>';
     }
@@ -103,18 +103,20 @@
 
   // ---------- footer ----------
   function paintFooter() {
-    var D = CL.data;
-    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><span class="logo-word">Claré</span>' +
-      '<p>Muebles y juguetes Montessori. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
+    var D = CL.data, wa = waNumber();
+    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><span class="logo-word">MOONDOS</span>' +
+      '<p>Objetos lindos y útiles, para regalar y para regalarte. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Demo preparada por iNGENIA: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
       '<nav class="foot-col" aria-label="Tienda"><h2>Tienda</h2><ul>' + D.categories.map(function (c) { return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>'; }).join('') +
-      '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li><a' + link('/por-etapa') + '>Por etapa</a></li></ul></nav>' +
+      '<li><a' + link('/ideas') + '>Ideas para regalar</a></li></ul></nav>' +
       '<nav class="foot-col" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a></li><li><a' + link('/nosotros') + '>Nosotros</a></li><li><a' + link('/privacidad') + '>Privacidad</a></li></ul></nav>' +
-      '<div class="foot-col"><h2>Contacto</h2><ul><li><a href="' + esc('https://wa.me/' + (cfg.WHATSAPP_PHONE_E164 || '').replace(/\D/g, '') + '?text=' + encodeURIComponent('Hola Claré, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' +
+      '<div class="foot-col"><h2>Contacto</h2><ul>' + (wa ? '<li><a href="' + esc('https://wa.me/' + wa + '?text=' + encodeURIComponent('Hola MOONDOS, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' : '') +
       (cfg.CONTACT_EMAIL ? '<li><a href="mailto:' + esc(cfg.CONTACT_EMAIL) + '">' + esc(cfg.CONTACT_EMAIL) + '</a></li>' : '') +
       (cfg.INSTAGRAM_URL ? '<li><a href="' + esc(cfg.INSTAGRAM_URL) + '" rel="noopener">Instagram</a></li>' : '') + '</ul></div></div>' +
-      '<p class="foot-legal">© ' + new Date().getFullYear() + ' Claré' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo') + '</p>';
+      '<p class="foot-legal">© ' + new Date().getFullYear() + ' MOONDOS' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo iNGENIA') + '</p>';
     CL.fixLinks($('#site-footer'));
   }
+  function waNumber() { return String(cfg.WHATSAPP_PHONE_E164 || (CL.panelConfig && CL.panelConfig.whatsappNumero) || '').replace(/\D/g, ''); }
+  CL.waNumber = waNumber;
 
   // ---------- marca activa en navegación ----------
   CL.syncChrome = function (path) {
@@ -138,9 +140,11 @@
     document.addEventListener('click', function (e) {
       var add = e.target.closest('[data-add]');
       if (add) {
-        var id = add.getAttribute('data-add'), p = CL.byId[id], sel = add.getAttribute('data-qty-from'), q = 1;
+        var id = add.getAttribute('data-add'), p = CL.byId[id], sel = add.getAttribute('data-qty-from'), q = 1, vid = null;
+        if (!p || !p.available) return;
         if (sel) { var qi = $(sel); q = parseInt(qi && qi.value, 10) || 1; }
-        CL.store.add(id, q); CL.updateCounts(); addFeedback(add);
+        var vr = $('input[name="pres"]:checked'); if (vr && add.hasAttribute('data-qty-from')) vid = vr.value;
+        CL.store.add(id, q, vid); CL.updateCounts(); addFeedback(add);
         CL.toast((q > 1 ? q + ' × ' : '') + p.name + (q > 1 ? ' agregados' : ' agregado') + ' al carrito.', { label: 'Ver carrito', path: '/carrito' });
         return;
       }
@@ -232,12 +236,17 @@
     CL.fixLinks(document);
     $('#skip-link').addEventListener('click', function (e) { e.preventDefault(); $('#app').focus(); });
 
-    var missing = CL.svc.missingConfig();
-    if (missing.length) { document.documentElement.classList.add('reveal-ready'); showBoot(CL.views.configError(missing).html); return; }
-
-    CL.svc.catalogApi.load().then(function (data) {
+    CL.svc.catalogApi.load().then(function (r) {
+      var data = window.MD_DATA.build(r.resp);
+      CL.live = !!r.live; CL.panelConfig = r.resp.config || {}; CL.loadReason = r.reason || '';
       CL.setData(data); CL.store.init();
-      $('#sub-muebles').innerHTML = CL.catById('muebles').subcategories.map(function (s) { return '<li><a' + link('/muebles?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('');
+      var ds = $('#demo-strip');
+      if (ds) ds.innerHTML = '<span class="demo-dot" aria-hidden="true"></span> ' + (CL.live ? 'Demo conectada al panel de gestión · productos y precios de ejemplo' : 'Demo preparada por iNGENIA · productos y precios de ejemplo');
+      $('#nav-cats').innerHTML = data.categories.slice(0, 6).map(function (c) {
+        var subs = c.subcategories.length;
+        return '<li' + (subs ? ' class="has-sub"' : '') + '><a href="' + esc(CL.L('/' + c.slug)) + '" data-r="/' + esc(c.slug) + '">' + esc(c.name) + '</a>' +
+          (subs ? '<button class="sub-toggle" type="button" aria-expanded="false" aria-label="Mostrar subgrupos de ' + esc(c.name) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><ul class="submenu">' + c.subcategories.map(function (s) { return '<li><a' + link('/' + c.slug + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('') + '</ul>' : '') + '</li>';
+      }).join('') + '<li><a' + link('/ideas') + '>Ideas</a></li>';
       $('#menu-links').innerHTML = menuLinksHTML();
       CL.fixLinks(document);
       paintFooter();
@@ -245,12 +254,10 @@
       CL.updateCounts();
       CL.initScroll();
 
-      // cabecera compacta (observer sobre un centinela, sin listener de scroll)
       var sent = $('#scroll-sentinel');
       if ('IntersectionObserver' in window && sent) new IntersectionObserver(function (en) { header.classList.toggle('is-compact', !en[0].isIntersecting); }).observe(sent);
 
-      // entrada del wordmark: una sola vez por visita
-      try { if (!sessionStorage.getItem('clare_intro') && !CL.reduce()) { $('#logo-word').classList.add('intro'); sessionStorage.setItem('clare_intro', '1'); } } catch (e) { /* noop */ }
+      try { if (!sessionStorage.getItem('md_intro') && !CL.reduce()) { $('#logo-word').classList.add('intro'); sessionStorage.setItem('md_intro', '1'); } } catch (e) { /* noop */ }
 
       document.documentElement.classList.add('reveal-ready');
       CL.render(false);

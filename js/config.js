@@ -1,36 +1,26 @@
 /* ============================================================
-   CLARÉ — CONFIGURACIÓN CENTRAL
-   Todo lo que cambia entre demo y producción vive acá.
-   No poner contraseñas, tokens ni claves en este archivo.
+   MOONDOS — CONFIGURACIÓN CENTRAL (demo preparada por iNGENIA)
+   ÚNICO archivo a tocar para conectar la web con el panel.
+   No poner contraseñas ni claves acá: este archivo es público.
    ============================================================ */
-window.CLARE_CONFIG = {
+window.MD_CONFIG = {
   // 'demo' | 'produccion'
-  // En 'produccion' la tienda se NEGA a funcionar si falta GAS_WEB_APP_URL,
-  // WHATSAPP_PHONE_E164 o si el catálogo sigue siendo 'fixtures'.
   STORE_MODE: 'demo',
 
-  // URL pública del Web App de Apps Script (/exec) que recibe el pedido por doPost.
-  // PENDIENTE: la provee iNGENIA. Vacía = adaptador demo (no se envía nada a ningún lado).
-  GAS_WEB_APP_URL: '',
+  // URL /exec del panel demo de MOONDOS (Lanzador → tarjeta «Conexión con la web»).
+  // Vacía = la web usa el catálogo de ejemplo incluido y los pedidos NO se envían a ningún panel.
+  PANEL_URL: '',
 
-  // 'fixtures' (datos demo de js/data.js) | 'remote' (pendiente: mecanismo público de catálogo).
-  CATALOG_SOURCE: 'fixtures',
-
-  // Número informado por Claré, tal cual lo dieron.
-  WHATSAPP_PHONE_RAW: '3466406696',
-  // Formato internacional SOLO DÍGITOS para wa.me (ej: '549...'). PENDIENTE de confirmar prefijo/tipo de línea.
-  // Vacío en demo = el enlace abre WhatsApp sin contacto elegido y se muestra un aviso.
+  // WhatsApp para consultas (solo dígitos, con código de país). Si queda vacío se usa el que devuelve el panel.
   WHATSAPP_PHONE_E164: '',
 
-  SHIPPING_CITY: 'Santa Fe',
-  SHIPPING_FEE_ARS: 9000, // valor DEMO
+  BRAND_NAME: 'MOONDOS',
   CURRENCY: 'ARS',
+  CONTACT_EMAIL: '',
+  INSTAGRAM_URL: '',
 
-  // Textos de marca / contacto (pendientes de Claré)
-  BRAND_NAME: 'Claré',
-  CONTACT_EMAIL: '', // pendiente
-  INSTAGRAM_URL: '', // pendiente
+  // Nombres de productos a destacar en el inicio (se buscan por nombre; si falta alguno se completa solo).
+  FEATURED_NAMES: ['Calendario de adviento 2026', 'Vela de soja vainilla', 'Taza de cerámica', 'Mate de cerámica con bombilla', 'Tabla de madera para picada', 'Cuaderno tapa dura', 'Box desayuno armado', 'Lámina Luna nueva'],
 
-  // Límites de campos (el servidor debe validar también)
   LIMITS: { name: 80, address: 200, notes: 500, email: 120, qtyMax: 20 }
 };
