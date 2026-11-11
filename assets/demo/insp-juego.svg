@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Espacio de juego (ilustración demostrativa)"><title>Espacio de juego (ilustración demostrativa)</title><rect width="800" height="600" fill="#F8EFE4"/>
+  <path d="M0 432 H800 V600 H0 Z" fill="#E0C9B1" opacity=".7"/>
+  <path d="M496 40 h112.00000000000001 v240 a56.00000000000001 56.00000000000001 0 0 1 -112.00000000000001 0 z" fill="#A1AD96" opacity=".22"/>
+  <circle cx="96" cy="120" r="72" fill="#D9A78F" opacity=".35"/>
+  <g transform="translate(60 190) scale(0.8)">
+  <path d="M30 330 a170 170 0 0 1 340 0 h-44 a126 126 0 0 0 -252 0 z" fill="#C49A6C"/>
+  <path d="M74 330 a126 126 0 0 1 252 0 h-42 a84 84 0 0 0 -168 0 z" fill="#DDB98A"/>
+  <path d="M116 330 a84 84 0 0 1 168 0 h-40 a44 44 0 0 0 -88 0 z" fill="#EBD2AE"/>
+  <path d="M156 330 a44 44 0 0 1 88 0 z" fill="#E0C9B1"/></g><g transform="translate(400 220) scale(0.7)">
+  <path d="M40 330 L120 190 L200 330 Z" fill="#7FA3B5"/>
+  <rect x="150" y="230" width="110" height="100" rx="8" fill="#B57D61"/>
+  <circle cx="300" cy="290" r="46" fill="#E5BE6B"/>
+  <path d="M200 330 a80 80 0 0 1 160 0 z" fill="#A1AD96" transform="translate(0 0)"/>
+  <rect x="226" y="150" width="70" height="80" rx="8" fill="#C8694F" transform="rotate(-10 260 190)"/>
+  <rect x="86" y="120" width="60" height="60" rx="8" fill="#E5BE6B" transform="rotate(14 116 150)"/></g><g transform="translate(560 140) scale(0.5)"><rect x="50" y="280" width="92" height="92" rx="12" fill="#A1AD96" stroke="#C49A6C" stroke-width="4"/><text x="96" y="344" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">1</text><rect x="154" y="280" width="92" height="92" rx="12" fill="#B57D61" stroke="#C49A6C" stroke-width="4"/><text x="200" y="344" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">2</text><rect x="258" y="280" width="92" height="92" rx="12" fill="#7FA3B5" stroke="#C49A6C" stroke-width="4"/><text x="304" y="344" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">3</text><rect x="102" y="180" width="92" height="92" rx="12" fill="#E5BE6B" stroke="#C49A6C" stroke-width="4"/><text x="148" y="244" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">4</text><rect x="206" y="180" width="92" height="92" rx="12" fill="#8BAA7E" stroke="#C49A6C" stroke-width="4"/><text x="252" y="244" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">5</text><rect x="154" y="80" width="92" height="92" rx="12" fill="#C8694F" stroke="#C49A6C" stroke-width="4"/><text x="200" y="144" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="46" fill="#F8EFE4">6</text></g><text x="786" y="588" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

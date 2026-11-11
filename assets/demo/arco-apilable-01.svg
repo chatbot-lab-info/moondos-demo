@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Arco apilable (ilustración demostrativa)"><title>Arco apilable (ilustración demostrativa)</title><rect width="640" height="640" fill="#DFC9B2"/>
+      <circle cx="320" cy="330" r="250" fill="#F8EFE4" opacity=".7"/>
+      <ellipse cx="320" cy="560" rx="170" ry="16" fill="#4C3C20" opacity=".08"/><g transform="translate(120 120) scale(1)">
+  <path d="M30 330 a170 170 0 0 1 340 0 h-44 a126 126 0 0 0 -252 0 z" fill="#C49A6C"/>
+  <path d="M74 330 a126 126 0 0 1 252 0 h-42 a84 84 0 0 0 -168 0 z" fill="#DDB98A"/>
+  <path d="M116 330 a84 84 0 0 1 168 0 h-40 a44 44 0 0 0 -88 0 z" fill="#EBD2AE"/>
+  <path d="M156 330 a44 44 0 0 1 88 0 z" fill="#E0C9B1"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

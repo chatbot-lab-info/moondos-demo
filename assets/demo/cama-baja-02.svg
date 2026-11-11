@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Cama baja (ilustración demostrativa)"><title>Cama baja (ilustración demostrativa)</title><rect width="640" height="640" fill="#F8EFE4"/>
+    <path d="M0 470 H640 V640 H0 Z" fill="#E0C9B1" opacity=".75"/>
+    <path d="M440 60 h110 v200 a55 55 0 0 1 -110 0 z" fill="#8A9880" opacity=".18"/>
+    <circle cx="90" cy="110" r="46" fill="#D9A78F" opacity=".35"/>
+    <ellipse cx="320" cy="545" rx="190" ry="16" fill="#4C3C20" opacity=".1"/><g transform="translate(120 110) scale(1)">
+  <path d="M60 170 L200 50 L340 170" fill="none" stroke="#DDB98A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M60 170 L200 50 L340 170" fill="none" stroke="#C49A6C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/>
+  <rect x="52" y="170" width="296" height="16" rx="6" fill="#DDB98A" stroke="#C49A6C" stroke-width="4"/>
+  <rect x="62" y="186" width="276" height="40" rx="14" fill="#FFFDF9" stroke="#E0C9B1" stroke-width="5"/>
+  <rect x="70" y="190" width="90" height="26" rx="12" fill="#EFE0CD"/>
+  <rect x="60" y="226" width="14" height="46" rx="4" fill="#C49A6C"/><rect x="326" y="226" width="14" height="46" rx="4" fill="#C49A6C"/>
+  <path d="M60 170 V272 M340 170 V272" stroke="#DDB98A" stroke-width="12" stroke-linecap="round"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

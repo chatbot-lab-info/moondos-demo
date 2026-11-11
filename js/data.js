@@ -1,81 +1,151 @@
 /* ============================================================
-   MOONDOS — MODELO DE DATOS
-   Convierte la respuesta de ?action=tienda del panel (o el catálogo de ejemplo) en el modelo que usa la web.
-   Categorías y subcategorías salen de los propios productos del panel.
+   CLARÉ — DATOS DEMO (fixtures)
+   TODO lo de acá es demostrativo y reemplazable. No son datos
+   comerciales de Claré: productos, precios, textos y especificaciones
+   están pendientes de aprobación del cliente.
    ============================================================ */
 (function () {
-  var CFG = window.MD_CONFIG;
-  function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim(); }
-  function slugify(s) { return norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'x'; }
-
-  // Textos de portada por categoría (si el panel trae una categoría nueva se usa un texto genérico).
-  var COPY = {
-    'decoracion': { title: 'Para vestir tu casa', description: 'Láminas, floreros, macetas y detalles que le dan carácter a cada rincón.' },
-    'velas-y-aromas': { title: 'Velas y aromas', description: 'Velas de soja, difusores y sahumerios para armar un clima.' },
-    'cocina-y-mesa': { title: 'Cocina y mesa', description: 'Tazas, mates, copas y tablas para el día a día y para recibir.' },
-    'papeleria': { title: 'Papelería', description: 'Cuadernos, agendas 2027 y lapiceras que dan ganas de escribir.' },
-    'accesorios': { title: 'Accesorios', description: 'Bolsos, neceseres y llaveros para llevar a todos lados.' },
-    'para-regalar': { title: 'Para regalar', description: 'Cajas, tarjetas y boxes armados, listos para sorprender.' },
-    'navidad': { title: 'Navidad', description: 'Calendarios de adviento, adornos y velas de temporada.' }
-  };
-
-  var ARTICLES = [
-    { slug: 'regalos-de-cumpleanos', title: 'Qué regalar en un cumpleaños', summary: 'Ideas simples para acertar sin vueltas, según cuánto quieras gastar.', cover: 'assets/img/banner-para-regalar.svg',
-      body: ['Si no sabés qué elegir, una vela y una taza siempre funcionan: son lindas, se usan y entran en cualquier presupuesto.', 'Para alguien que recién se muda, sumá una maceta o una lámina. Para quien ama escribir, un cuaderno con una lapicera buena.', 'Y si querés que llegue listo, armá una caja de regalo con tarjeta: pasás por el local y te lo dejamos envuelto.'],
-      related: ['Vela de soja vainilla', 'Taza de cerámica', 'Caja de regalo chica', 'Tarjeta de cumpleaños'] },
-    { slug: 'arma-tu-box-de-desayuno', title: 'Armá tu box de desayuno', summary: 'Una combinación fácil de repetir para agasajar a alguien.', cover: 'assets/img/banner-cocina-y-mesa.svg',
-      body: ['Elegí una taza o un mate, sumá una vela chica y una tarjeta escrita a mano.', 'Todo entra en una caja de regalo y queda como si lo hubieras planeado hace semanas.', 'Si preferís no armarlo, tenemos un box listo para llevar.'],
-      related: ['Box desayuno armado', 'Mate de cerámica con bombilla', 'Set de velas mini', 'Caja de regalo grande'] },
-    { slug: 'navidad-que-se-usa-todo-el-ano', title: 'Navidad: regalos que se usan todo el año', summary: 'Más allá del adorno: objetos que siguen siendo lindos en enero.', cover: 'assets/img/banner-navidad.svg',
-      body: ['El calendario de adviento es el clásico para arrancar diciembre con ilusión. Los de tela se reutilizan cada año.', 'Para la mesa, copas y repasadores; para el living, velas y guirnaldas.', 'Y para cerrar, tarjetas navideñas con sobre para que cada regalo lleve su mensaje.'],
-      related: ['Calendario de adviento 2026', 'Calendario de adviento de tela', 'Copas de vino (x2)', 'Tarjetas navideñas (x6)'] }
-  ];
-  var FAQ = [
-    { q: '¿Cómo hago un pedido?', a: 'Armás el carrito, completás tus datos, elegís si retirás por el local o querés envío y confirmás. El pedido llega directo al local y te contactamos para coordinar.' },
-    { q: '¿Puedo retirar en el local?', a: 'Sí. Elegí "Retiro en el local" al confirmar y te avisamos cuando esté listo.' },
-    { q: '¿Cómo se paga?', a: 'Efectivo o transferencia. El pago se coordina con el local; no se cobra nada online.' },
-    { q: '¿Hacen envíos?', a: 'Sí. El costo de envío se suma al total cuando elegís esa opción.' },
-    { q: '¿Preparan regalos?', a: 'Sí, consultá por el envoltorio y las tarjetas con mensaje.' }
-  ];
-
-  function build(resp) {
-    var prods = [], cats = [], catMap = {}, used = {};
-    (resp.productos || []).forEach(function (r, i) {
-      if (r.alALaVenta === false) return;
-      var catName = r.categoria || 'Otros', cid = slugify(catName);
-      if (!catMap[cid]) {
-        var cp = COPY[cid] || { title: catName, description: 'Mirá los productos de ' + catName + '.' };
-        catMap[cid] = { id: cid, slug: cid, name: catName, title: cp.title, description: cp.description, image: 'assets/img/banner-' + cid + '.svg', subcategories: [], sortOrder: cats.length };
-        cats.push(catMap[cid]);
-      }
-      var sid = null;
-      if (r.subcategoria) {
-        sid = slugify(r.subcategoria);
-        if (!catMap[cid].subcategories.some(function (s) { return s.id === sid; })) catMap[cid].subcategories.push({ id: sid, name: r.subcategoria });
-      }
-      var pres = (r.presentaciones || []).map(function (x) { return { id: x.presentacionId, name: x.nombre, price: Number(x.precio) || 0 }; });
-      var base = Number(r.precioBase != null ? r.precioBase : r.precio) || 0;
-      var prices = pres.map(function (x) { return x.price; }).filter(function (n) { return n > 0; });
-      var slug = slugify(r.slugWeb || r.nombre); if (used[slug]) slug += '-' + (++used[slug]); else used[slug] = 1;
-      prods.push({
-        id: r.productoId || r.id, slug: slug, name: r.nombre, shortDescription: r.descripcion || '', description: r.descripcion || '',
-        categoryId: cid, subcategoryId: sid, priceARS: pres.length && prices.length ? Math.min.apply(null, prices) : base, fromPrice: pres.length > 0, variants: pres,
-        images: [{ url: r.imagenUrl || 'assets/img/nosotros.svg', alt: r.nombre }],
-        available: r.disponible !== false && r.estadoStock !== 'sin_stock', featured: false, sortOrder: i
-      });
-    });
-    // destacados por nombre; se completa con productos disponibles
-    var byName = {}; prods.forEach(function (p) { byName[norm(p.name)] = p; });
-    var feat = [];
-    (CFG.FEATURED_NAMES || []).forEach(function (n) { var p = byName[norm(n)]; if (p && p.available && feat.indexOf(p) < 0) feat.push(p); });
-    prods.forEach(function (p) { if (feat.length < 8 && p.available && feat.indexOf(p) < 0) feat.push(p); });
-    feat.slice(0, 8).forEach(function (p) { p.featured = true; });
-    var articles = ARTICLES.map(function (a) {
-      return { id: a.slug, slug: a.slug, title: a.title, summary: a.summary, coverImage: a.cover, body: a.body,
-        relatedProductIds: a.related.map(function (n) { return byName[norm(n)]; }).filter(Boolean).map(function (p) { return p.id; }) };
-    });
-    var navidad = catMap['navidad'] || null;
-    return { products: prods, categories: cats, articles: articles, faq: FAQ, navidad: navidad };
+  var IMG = 'assets/demo/';
+  function imgs(slug, alt) {
+    return [
+      { url: IMG + slug + '-01.svg', alt: alt + ' (ilustración demostrativa)' },
+      { url: IMG + slug + '-02.svg', alt: alt + ' en un ambiente (ilustración demostrativa)' }
+    ];
   }
-  window.MD_DATA = { build: build, norm: norm, slugify: slugify };
+  var SPECS_EMPTY = { materials: null, dimensions: null, finish: null, assembly: null, care: null, recommendedStage: null };
+
+  function product(o) {
+    return {
+      id: 'demo-' + o.slug, slug: o.slug, name: o.name,
+      shortDescription: o.short || 'Texto demostrativo, reemplazar por contenido aprobado.',
+      description: 'Descripción demostrativa. Claré todavía no compartió el texto real de este producto.',
+      categoryId: o.cat, subcategoryId: o.sub || null,
+      priceARS: o.price, currency: 'ARS',
+      images: imgs(o.slug, o.name),
+      variants: [],
+      bundleItems: o.bundle || [],
+      collectionTags: o.tags || [],
+      specifications: SPECS_EMPTY,
+      availability: 'demo', featured: !!o.featured, status: 'demo', updatedAt: null,
+      sortOrder: o.order
+    };
+  }
+
+  var products = [
+    // --- Muebles ---
+    product({ slug: 'biblioteca-frontal', name: 'Biblioteca frontal', cat: 'muebles', sub: 'lectura-organizacion', price: 95000, tags: ['lectura-y-orden'], featured: true, order: 1 }),
+    product({ slug: 'estante-bajo', name: 'Estante bajo para juguetes', cat: 'muebles', sub: 'lectura-organizacion', price: 56000, tags: ['lectura-y-orden'], order: 2 }),
+    product({ slug: 'estante-madera', name: 'Estante de juguetes de madera', cat: 'muebles', sub: 'lectura-organizacion', price: 66000, tags: ['lectura-y-orden'], order: 3 }),
+    product({ slug: 'mesa-silla', name: 'Set de mesa y silla infantil', cat: 'muebles', sub: 'mesas-y-sillas', price: 136000, tags: ['juego-y-construccion', 'autonomia'], featured: true, order: 4 }),
+    product({ slug: 'torre-aprendizaje', name: 'Torre de aprendizaje', cat: 'muebles', sub: 'autonomia-movimiento', price: 190000, tags: ['autonomia'], order: 5 }),
+    product({ slug: 'cama-baja', name: 'Cama baja', cat: 'muebles', sub: 'descanso', price: 510000, tags: ['autonomia'], order: 6 }),
+    // --- Juguetes ---
+    product({ slug: 'arco-apilable', name: 'Arco apilable', cat: 'juguetes', sub: 'construccion-encastre', price: 45000, tags: ['juego-y-construccion', 'primeros-pasos'], featured: true, order: 7 }),
+    product({ slug: 'bloques-geometricos', name: 'Bloques geométricos', cat: 'juguetes', sub: 'construccion-encastre', price: 65000, tags: ['juego-y-construccion', 'primeros-pasos'], order: 8 }),
+    product({ slug: 'cubos-numericos', name: 'Cubos numéricos', cat: 'juguetes', sub: 'construccion-encastre', price: 66000, tags: ['juego-y-construccion'], order: 9 }),
+    product({ slug: 'vehiculo-empuje', name: 'Vehículo de empuje', cat: 'juguetes', sub: 'juego-simbolico-movimiento', price: 115000, tags: ['primeros-pasos', 'autonomia'], featured: true, order: 10 }),
+    // --- Combos (producto compuesto, precio demo propio, sin descuentos ni tachados) ---
+    product({
+      slug: 'kit-primeros-pasos', name: 'Kit primeros pasos', cat: 'combos', price: 195000, tags: ['primeros-pasos'], order: 11,
+      bundle: [{ productId: 'demo-vehiculo-empuje', name: 'Vehículo de empuje', qty: 1 }, { productId: 'demo-bloques-geometricos', name: 'Bloques geométricos', qty: 1 }]
+    }),
+    product({
+      slug: 'combo-pequeno-artista', name: 'Combo pequeño artista', cat: 'combos', price: 146000, tags: ['juego-y-construccion'], order: 12,
+      bundle: [{ productId: 'demo-mesa-silla', name: 'Set de mesa y silla infantil', qty: 1 }, { productId: null, name: 'Set creativo de hojas y crayones (componente demo)', qty: 1 }]
+    }),
+    product({
+      slug: 'kit-bebe-montessori', name: 'Kit bebé Montessori', cat: 'combos', price: 150000, tags: ['primeros-pasos'], order: 13,
+      bundle: [{ productId: 'demo-arco-apilable', name: 'Arco apilable', qty: 1 }, { productId: 'demo-cubos-numericos', name: 'Cubos numéricos', qty: 1 }]
+    })
+  ];
+
+  var categories = [
+    {
+      id: 'muebles', slug: 'muebles', name: 'Muebles', title: 'Rincón de lectura y estudio',
+      description: 'Texto demostrativo. Muebles pensados para ordenar, leer y jugar.', image: IMG + 'cat-muebles.svg',
+      subcategories: [
+        { id: 'lectura-organizacion', name: 'Lectura y organización' },
+        { id: 'mesas-y-sillas', name: 'Mesas y sillas' },
+        { id: 'autonomia-movimiento', name: 'Autonomía y movimiento' },
+        { id: 'descanso', name: 'Descanso' }
+      ], sortOrder: 1, status: 'active'
+    },
+    {
+      id: 'juguetes', slug: 'juguetes', name: 'Juguetes', title: 'Juego libre y construcción',
+      description: 'Texto demostrativo. Objetos para construir, apilar y descubrir.', image: IMG + 'cat-juguetes.svg',
+      subcategories: [
+        { id: 'construccion-encastre', name: 'Construcción y encastre' },
+        { id: 'juego-simbolico-movimiento', name: 'Juego simbólico y movimiento' }
+      ], sortOrder: 2, status: 'active'
+    },
+    {
+      id: 'combos', slug: 'combos', name: 'Combos', title: 'Sets especiales para cada etapa',
+      description: 'Texto demostrativo. Combinaciones de productos con precio propio.', image: IMG + 'cat-combos.svg',
+      subcategories: [], sortOrder: 3, status: 'active'
+    }
+  ];
+
+  // Colecciones editoriales (accesos por necesidad y guía "Por etapa"). Sin edades.
+  var collections = [
+    { id: 'lectura-y-orden', name: 'Leer y ordenar', moment: 'Lectura y orden', stage: true, description: 'Muebles para guardar libros y juguetes a la altura de los chicos. Colección demo.' },
+    { id: 'juego-y-construccion', name: 'Crear y jugar', moment: 'Juego y construcción', stage: true, description: 'Piezas para construir, apilar y crear. Colección demo.' },
+    { id: 'autonomia', name: 'Ganar autonomía', moment: null, stage: false, description: 'Muebles y objetos para moverse y elegir solos. Colección demo.' },
+    { id: 'primeros-pasos', name: 'Primeros pasos', moment: 'Primeros pasos', stage: true, description: 'Objetos para empezar a explorar. Colección demo, sin rangos de edad.' }
+  ];
+
+  var needs = [
+    { id: 'leer-ordenar', name: 'Leer y ordenar', collection: 'lectura-y-orden', icon: 'book' },
+    { id: 'crear-jugar', name: 'Crear y jugar', collection: 'juego-y-construccion', icon: 'blocks' },
+    { id: 'ganar-autonomia', name: 'Ganar autonomía', collection: 'autonomia', icon: 'step' }
+  ];
+
+  var articles = [
+    {
+      id: 'demo-rincon-lectura', slug: 'ideas-rincon-lectura', title: 'Ideas para armar un rincón de lectura',
+      summary: 'Ideas generales para sumar un lugar tranquilo de lectura en casa. Contenido demostrativo.',
+      coverImage: 'assets/inspiracion/rincon-lectura.jpg',
+      body: [
+        'Contenido demostrativo: este texto es de ejemplo y será reemplazado por la redacción aprobada por Claré.',
+        'Una idea general: elegí un rincón con buena luz y un mueble donde los libros queden a la vista y a la altura de los chicos.',
+        'Sumá una alfombra o almohadón para que el lugar invite a quedarse.'
+      ],
+      relatedProductIds: ['demo-biblioteca-frontal', 'demo-estante-bajo'], status: 'demo', publishedAt: null
+    },
+    {
+      id: 'demo-espacio-juego', slug: 'organizar-espacio-de-juego', title: 'Cómo organizar un espacio de juego',
+      summary: 'Ideas generales para ordenar juguetes y dejar lugar para jugar. Contenido demostrativo.',
+      coverImage: 'assets/inspiracion/espacio-juego.jpg',
+      body: [
+        'Contenido demostrativo: este texto es de ejemplo y será reemplazado por la redacción aprobada por Claré.',
+        'Una idea general: agrupá los juguetes por tipo y dejá poco a la vista, para que elegir sea simple.',
+        'Mantené un espacio despejado en el piso para construir y jugar.'
+      ],
+      relatedProductIds: ['demo-estante-madera', 'demo-arco-apilable'], status: 'demo', publishedAt: null
+    },
+    {
+      id: 'demo-elegir-muebles', slug: 'elegir-muebles-segun-el-espacio', title: 'Elegir muebles según el espacio disponible',
+      summary: 'Ideas generales para pensar medidas y circulación antes de elegir. Contenido demostrativo.',
+      coverImage: 'assets/inspiracion/elegir-muebles.jpg',
+      body: [
+        'Contenido demostrativo: este texto es de ejemplo y será reemplazado por la redacción aprobada por Claré.',
+        'Una idea general: medí el lugar antes de elegir y dejá espacio para circular.',
+        'Las medidas reales de cada producto se mostrarán cuando Claré las confirme.'
+      ],
+      relatedProductIds: ['demo-cama-baja', 'demo-torre-aprendizaje'], status: 'demo', publishedAt: null
+    }
+  ];
+
+  // Preguntas frecuentes. answer:null = pendiente de confirmar por Claré (editable acá).
+  var faq = [
+    { q: '¿Cómo hago un pedido?', a: 'Demo: armás el carrito, completás tus datos y tocás “Enviar pedido por WhatsApp”; revisás y enviás el mensaje desde WhatsApp.' },
+    { q: '¿Cómo coordinamos el pago?', a: 'Demo: Claré continúa la coordinación manualmente por WhatsApp después de recibir tu mensaje.' },
+    { q: '¿Cuánto cuesta el envío?', a: 'Demo: $9.000 dentro de la ciudad de Santa Fe.' },
+    { q: '¿A qué zonas entregan?', a: 'Demo: la tarifa de esta maqueta cubre la ciudad de Santa Fe. La cobertura fuera de la ciudad está pendiente de confirmar.' },
+    { q: '¿Cómo sé cuándo llega?', a: null },
+    { q: '¿Los muebles requieren armado?', a: null },
+    { q: '¿Puedo cambiar o cancelar un pedido?', a: null },
+    { q: '¿Cómo se limpian y cuidan los productos?', a: null }
+  ];
+
+  window.CLARE_DATA = { products: products, categories: categories, collections: collections, needs: needs, articles: articles, faq: faq };
 })();

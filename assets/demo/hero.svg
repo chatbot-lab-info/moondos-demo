@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" role="img" aria-label="Escena de hogar con mesa, silla y arco de madera (ilustración demostrativa)"><title>Escena de hogar con mesa, silla y arco de madera (ilustración demostrativa)</title><rect width="1000" height="800" fill="#F8EFE4"/>
+  <path d="M0 576 H1000 V800 H0 Z" fill="#E0C9B1" opacity=".7"/>
+  <path d="M620 40 h140 v320 a70 70 0 0 1 -140 0 z" fill="#A1AD96" opacity=".22"/>
+  <circle cx="120" cy="160" r="96" fill="#D9A78F" opacity=".35"/>
+  <g transform="translate(80 330) scale(1.25)">
+  <rect x="40" y="170" width="250" height="24" rx="10" fill="#EBD2AE" stroke="#C49A6C" stroke-width="5"/>
+  <rect x="62" y="194" width="18" height="150" rx="5" fill="#DDB98A"/><rect x="250" y="194" width="18" height="150" rx="5" fill="#DDB98A"/>
+  <rect x="330" y="150" width="18" height="140" rx="5" fill="#C49A6C"/>
+  <rect x="300" y="228" width="80" height="18" rx="7" fill="#DDB98A" stroke="#C49A6C" stroke-width="4"/>
+  <rect x="302" y="246" width="14" height="98" rx="4" fill="#C49A6C"/><rect x="364" y="246" width="14" height="98" rx="4" fill="#C49A6C"/>
+  <circle cx="110" cy="158" r="12" fill="#B57D61"/><rect x="150" y="146" width="40" height="24" rx="5" fill="#A1AD96"/></g><g transform="translate(480 420) scale(0.8)">
+  <path d="M30 330 a170 170 0 0 1 340 0 h-44 a126 126 0 0 0 -252 0 z" fill="#C49A6C"/>
+  <path d="M74 330 a126 126 0 0 1 252 0 h-42 a84 84 0 0 0 -168 0 z" fill="#DDB98A"/>
+  <path d="M116 330 a84 84 0 0 1 168 0 h-40 a44 44 0 0 0 -88 0 z" fill="#EBD2AE"/>
+  <path d="M156 330 a44 44 0 0 1 88 0 z" fill="#E0C9B1"/></g><g transform="translate(700 500) scale(0.5)">
+  <path d="M40 330 L120 190 L200 330 Z" fill="#7FA3B5"/>
+  <rect x="150" y="230" width="110" height="100" rx="8" fill="#B57D61"/>
+  <circle cx="300" cy="290" r="46" fill="#E5BE6B"/>
+  <path d="M200 330 a80 80 0 0 1 160 0 z" fill="#A1AD96" transform="translate(0 0)"/>
+  <rect x="226" y="150" width="70" height="80" rx="8" fill="#C8694F" transform="rotate(-10 260 190)"/>
+  <rect x="86" y="120" width="60" height="60" rx="8" fill="#E5BE6B" transform="rotate(14 116 150)"/></g><text x="986" y="788" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

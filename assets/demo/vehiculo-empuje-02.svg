@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Vehículo de empuje (ilustración demostrativa)"><title>Vehículo de empuje (ilustración demostrativa)</title><rect width="640" height="640" fill="#F8EFE4"/>
+    <path d="M0 470 H640 V640 H0 Z" fill="#E0C9B1" opacity=".75"/>
+    <path d="M440 60 h110 v200 a55 55 0 0 1 -110 0 z" fill="#8A9880" opacity=".18"/>
+    <circle cx="90" cy="110" r="46" fill="#D9A78F" opacity=".35"/>
+    <ellipse cx="320" cy="545" rx="190" ry="16" fill="#4C3C20" opacity=".1"/><g transform="translate(120 110) scale(1)">
+  <path d="M60 280 H320 Q350 280 350 250 V230 Q350 210 330 210 H250 L230 120 H210 L222 210 H110 Q60 210 60 250 Z" fill="#DDB98A" stroke="#C49A6C" stroke-width="6" stroke-linejoin="round"/>
+  <rect x="198" y="80" width="90" height="16" rx="8" fill="#C49A6C" transform="rotate(-6 243 88)"/>
+  <rect x="100" y="180" width="110" height="22" rx="10" fill="#B57D61"/>
+  <circle cx="110" cy="318" r="40" fill="#A1AD96" stroke="#8A9880" stroke-width="6"/><circle cx="110" cy="318" r="14" fill="#F8EFE4"/>
+  <circle cx="308" cy="318" r="40" fill="#A1AD96" stroke="#8A9880" stroke-width="6"/><circle cx="308" cy="318" r="14" fill="#F8EFE4"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

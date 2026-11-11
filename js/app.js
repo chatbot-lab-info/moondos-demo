@@ -1,5 +1,5 @@
 /* ============================================================
-   MOONDOS — ARRANQUE Y "CHROME" DEL SITIO (cabecera, menús, búsqueda, mini carrito, footer)
+   CLARÉ — ARRANQUE Y "CHROME" DEL SITIO (cabecera, menús, búsqueda, mini carrito, footer)
    ============================================================ */
 (function () {
   'use strict';
@@ -39,19 +39,41 @@
       if (c.subcategories.length) out += '<ul class="m-sub">' + c.subcategories.map(function (s) { return '<li><a' + link('/' + c.slug + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('') + '</ul>';
       out += '</div>';
     });
-    out += '<div class="m-group"><a class="m-link"' + link('/ideas') + '>Ideas para regalar</a></div>';
-    out += '<div class="m-group m-extra"><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
+    out += '<div class="m-group"><a class="m-link"' + link('/inspiracion') + '>Inspiración</a><ul class="m-sub">' + D.articles.map(function (a) { return '<li><a' + link('/inspiracion/' + a.slug) + '>' + esc(a.title) + '</a></li>'; }).join('') + '</ul></div>';
+    out += '<div class="m-group m-extra"><a' + link('/por-etapa') + '>Por etapa</a><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
     return out;
   }
+  function placeMenu(opener) {
+    // La tarjeta nace del botón que la abrió: hamburguesa (arriba) o "Categorías" (barra inferior)
+    var r = opener.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    var w = Math.min(vw - 24, 380), left = Math.max(12, Math.min(r.left + r.width / 2 - 28, vw - w - 12));
+    var fromDock = opener.id === 'dock-cats';
+    menuPanel.classList.toggle('from-dock', fromDock);
+    menuPanel.style.left = left + 'px'; menuPanel.style.width = w + 'px';
+    if (fromDock) {
+      var bottom = vh - r.top + 10;
+      menuPanel.style.top = 'auto'; menuPanel.style.bottom = bottom + 'px'; menuPanel.style.maxHeight = (vh - bottom - 16) + 'px';
+      menuPanel.style.transformOrigin = (r.left + r.width / 2 - left) + 'px 100%';
+    } else {
+      var top = r.bottom + 10;
+      menuPanel.style.bottom = 'auto'; menuPanel.style.top = top + 'px'; menuPanel.style.maxHeight = (vh - top - 16) + 'px';
+      menuPanel.style.transformOrigin = (r.left + r.width / 2 - left) + 'px 0';
+    }
+  }
+  var menuTimer = 0;
   function openMenu(opener) {
-    openers.menu = opener || menuBtn; menuPanel.hidden = false; scrim.hidden = false;
-    requestAnimationFrame(function () { menuPanel.classList.add('open'); scrim.classList.add('open'); });
+    openers.menu = opener || menuBtn; clearTimeout(menuTimer);
+    menuPanel.hidden = false; scrim.hidden = false; placeMenu(openers.menu);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { menuPanel.classList.add('open'); scrim.classList.add('open'); }); });
     menuBtn.setAttribute('aria-expanded', 'true'); CL.lockScroll(true);
-    var f = CL.focusables(menuPanel); if (f[1]) f[1].focus(); else if (f[0]) f[0].focus();
+    setTimeout(function () { var f = CL.focusables(menuPanel); if (f[1]) f[1].focus(); else if (f[0]) f[0].focus(); }, 30);
   }
   function closeMenu(silent) {
-    menuPanel.classList.remove('open'); scrim.classList.remove('open'); menuPanel.hidden = true; scrim.hidden = true;
+    menuPanel.classList.remove('open'); scrim.classList.remove('open');
     menuBtn.setAttribute('aria-expanded', 'false'); CL.lockScroll(false);
+    clearTimeout(menuTimer);
+    if (silent || CL.reduce()) { menuPanel.hidden = true; scrim.hidden = true; }
+    else menuTimer = setTimeout(function () { if (!menuPanel.classList.contains('open')) { menuPanel.hidden = true; scrim.hidden = true; } }, 300);
     if (!silent && openers.menu && openers.menu.focus) openers.menu.focus();
   }
 
@@ -84,7 +106,7 @@
       mini.innerHTML = '<p class="mini-empty">Tu carrito está vacío.</p><div class="mini-actions"><button type="button" class="btn btn-soft btn-small" data-mini-close>Seguir comprando</button></div>';
     } else {
       mini.innerHTML = '<h2 class="sr-only">Carrito</h2><ul class="mini-lines">' + lines.map(function (l) {
-        return '<li><img src="' + esc(l.p.images[0].url) + '" alt="" width="56" height="56"><div><p class="n">' + esc(l.name) + '</p><p class="q">' + l.qty + ' × ' + fmt(l.unit) + '</p></div><p class="t">' + fmt(l.line) + '</p></li>';
+        return '<li><img src="' + esc(l.p.images[0].url) + '" alt="" width="56" height="56"><div><p class="n">' + esc(l.p.name) + '</p><p class="q">' + l.qty + ' × ' + fmt(l.p.priceARS) + '</p></div><p class="t">' + fmt(l.line) + '</p></li>';
       }).join('') + '</ul><p class="mini-sub"><span>Subtotal</span><strong>' + fmt(sub) + '</strong></p>' +
         '<div class="mini-actions"><a class="btn btn-small"' + link('/carrito') + '>Ver carrito</a><button type="button" class="btn btn-soft btn-small" data-mini-close>Seguir comprando</button></div>';
     }
@@ -103,20 +125,18 @@
 
   // ---------- footer ----------
   function paintFooter() {
-    var D = CL.data, wa = waNumber();
-    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><span class="logo-word">MOONDOS</span>' +
-      '<p>Objetos lindos y útiles, para regalar y para regalarte. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Demo preparada por iNGENIA: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
+    var D = CL.data;
+    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="Claré"><use href="#clare-logo"/></svg>' +
+      '<p>Muebles y juguetes Montessori. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
       '<nav class="foot-col" aria-label="Tienda"><h2>Tienda</h2><ul>' + D.categories.map(function (c) { return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>'; }).join('') +
-      '<li><a' + link('/ideas') + '>Ideas para regalar</a></li></ul></nav>' +
+      '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li><a' + link('/por-etapa') + '>Por etapa</a></li></ul></nav>' +
       '<nav class="foot-col" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a></li><li><a' + link('/nosotros') + '>Nosotros</a></li><li><a' + link('/privacidad') + '>Privacidad</a></li></ul></nav>' +
-      '<div class="foot-col"><h2>Contacto</h2><ul>' + (wa ? '<li><a href="' + esc('https://wa.me/' + wa + '?text=' + encodeURIComponent('Hola MOONDOS, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' : '') +
+      '<div class="foot-col"><h2>Contacto</h2><ul><li><a href="' + esc('https://wa.me/' + (cfg.WHATSAPP_PHONE_E164 || '').replace(/\D/g, '') + '?text=' + encodeURIComponent('Hola Claré, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' +
       (cfg.CONTACT_EMAIL ? '<li><a href="mailto:' + esc(cfg.CONTACT_EMAIL) + '">' + esc(cfg.CONTACT_EMAIL) + '</a></li>' : '') +
       (cfg.INSTAGRAM_URL ? '<li><a href="' + esc(cfg.INSTAGRAM_URL) + '" rel="noopener">Instagram</a></li>' : '') + '</ul></div></div>' +
-      '<p class="foot-legal">© ' + new Date().getFullYear() + ' MOONDOS' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo iNGENIA') + '</p>';
+      '<p class="foot-legal">© ' + new Date().getFullYear() + ' Claré' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo') + '</p>';
     CL.fixLinks($('#site-footer'));
   }
-  function waNumber() { return String(cfg.WHATSAPP_PHONE_E164 || (CL.panelConfig && CL.panelConfig.whatsappNumero) || '').replace(/\D/g, ''); }
-  CL.waNumber = waNumber;
 
   // ---------- marca activa en navegación ----------
   CL.syncChrome = function (path) {
@@ -140,11 +160,10 @@
     document.addEventListener('click', function (e) {
       var add = e.target.closest('[data-add]');
       if (add) {
-        var id = add.getAttribute('data-add'), p = CL.byId[id], sel = add.getAttribute('data-qty-from'), q = 1, vid = null;
-        if (!p || !p.available) return;
+        var id = add.getAttribute('data-add'), p = CL.byId[id], sel = add.getAttribute('data-qty-from'), q = 1;
         if (sel) { var qi = $(sel); q = parseInt(qi && qi.value, 10) || 1; }
-        var vr = $('input[name="pres"]:checked'); if (vr && add.hasAttribute('data-qty-from')) vid = vr.value;
-        CL.store.add(id, q, vid); CL.updateCounts(); addFeedback(add);
+        if (p.availability === 'agotado') { CL.toast(p.name + ' no tiene stock por el momento.'); return; }
+        CL.store.add(id, q); CL.updateCounts(); addFeedback(add);
         CL.toast((q > 1 ? q + ' × ' : '') + p.name + (q > 1 ? ' agregados' : ' agregado') + ' al carrito.', { label: 'Ver carrito', path: '/carrito' });
         return;
       }
@@ -224,7 +243,19 @@
   // ---------- arranque ----------
   function showBoot(html) { $('#app').innerHTML = html; }
 
+  // Recargar la página (F5 / botón de recargar) SIEMPRE vuelve al inicio y arriba de todo.
+  function resetOnReload() {
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) { /* noop */ }
+    var nav = null;
+    try { nav = (performance.getEntriesByType('navigation') || [])[0]; } catch (e) { /* noop */ }
+    var isReload = nav ? nav.type === 'reload' : (performance.navigation && performance.navigation.type === 1);
+    if (!isReload) return;
+    try { history.replaceState({}, '', CL.FILE_MODE ? location.pathname + location.search : '/'); } catch (e) { /* noop */ }
+    window.scrollTo(0, 0);
+  }
+
   function start() {
+    resetOnReload();
     header = $('#site-header'); menuBtn = $('#menu-btn'); menuPanel = $('#menu-panel'); scrim = $('#scrim');
     searchBtn = $('#search-btn'); searchPanel = $('#search-panel'); searchInput = $('#search-input'); cartBtn = $('#cart-btn'); mini = $('#mini-cart');
 
@@ -236,17 +267,30 @@
     CL.fixLinks(document);
     $('#skip-link').addEventListener('click', function (e) { e.preventDefault(); $('#app').focus(); });
 
-    CL.svc.catalogApi.load().then(function (r) {
-      var data = window.MD_DATA.build(r.resp);
-      CL.live = !!r.live; CL.panelConfig = r.resp.config || {}; CL.loadReason = r.reason || '';
+    var missing = CL.svc.missingConfig();
+    if (missing.length) { document.documentElement.classList.add('reveal-ready'); showBoot(CL.views.configError(missing).html); return; }
+
+    // Aviso (solo modo demo) si el panel no se pudo contactar; desaparece solo cuando llegan los datos.
+    CL.svc.onStatus = function (st) {
+      var ds2 = $('#demo-strip'); if (!ds2 || cfg.STORE_MODE === 'produccion') return;
+      if (st && st.error && !st.stale) { ds2.hidden = false; ds2.textContent = 'SIN CONEXIÓN CON EL PANEL — se muestran datos de ejemplo (' + st.error + '). Los cambios del panel y los pedidos no se están sincronizando.'; ds2.style.background = '#8a2b1a'; }
+      else if (st && st.stale) { ds2.hidden = false; ds2.textContent = 'No se pudo actualizar desde el panel (' + st.error + '): se muestra la última versión guardada.'; ds2.style.background = '#8a2b1a'; }
+      else { ds2.hidden = true; ds2.textContent = ''; }
+    };
+    // Llegaron datos nuevos del panel con la página ya abierta: se actualizan precios/fotos/stock sin perder el lugar.
+    CL.svc.onData = function (d) {
+      var same = false; try { same = JSON.stringify(d.products) === JSON.stringify(CL.data.products); } catch (e) { /* noop */ }
+      if (same) return;
+      CL.setData(d); CL.store.init(); CL.updateCounts();
+      var typing = document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+      if (!typing) CL.rerender();
+    };
+    CL.svc.catalogApi.load().then(function (data) {
       CL.setData(data); CL.store.init();
-      var ds = $('#demo-strip');
-      if (ds) ds.innerHTML = '<span class="demo-dot" aria-hidden="true"></span> ' + (CL.live ? 'Demo conectada al panel de gestión · productos y precios de ejemplo' : 'Demo preparada por iNGENIA · productos y precios de ejemplo');
-      $('#nav-cats').innerHTML = data.categories.slice(0, 6).map(function (c) {
-        var subs = c.subcategories.length;
-        return '<li' + (subs ? ' class="has-sub"' : '') + '><a href="' + esc(CL.L('/' + c.slug)) + '" data-r="/' + esc(c.slug) + '">' + esc(c.name) + '</a>' +
-          (subs ? '<button class="sub-toggle" type="button" aria-expanded="false" aria-label="Mostrar subgrupos de ' + esc(c.name) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><ul class="submenu">' + c.subcategories.map(function (s) { return '<li><a' + link('/' + c.slug + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('') + '</ul>' : '') + '</li>';
-      }).join('') + '<li><a' + link('/ideas') + '>Ideas</a></li>';
+      ['muebles', 'juguetes'].forEach(function (id) {
+        $('#sub-' + id).innerHTML = '<li><a' + link('/' + id) + '>Ver todo</a></li>' + CL.catById(id).subcategories.map(function (s) { return '<li><a' + link('/' + id + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('');
+      });
+      $('#sub-inspiracion').innerHTML = '<li><a' + link('/inspiracion') + '>Ver todas las ideas</a></li>' + CL.data.articles.map(function (a) { return '<li><a' + link('/inspiracion/' + a.slug) + '>' + esc(a.title) + '</a></li>'; }).join('');
       $('#menu-links').innerHTML = menuLinksHTML();
       CL.fixLinks(document);
       paintFooter();
@@ -254,10 +298,12 @@
       CL.updateCounts();
       CL.initScroll();
 
+      // cabecera compacta (observer sobre un centinela, sin listener de scroll)
       var sent = $('#scroll-sentinel');
       if ('IntersectionObserver' in window && sent) new IntersectionObserver(function (en) { header.classList.toggle('is-compact', !en[0].isIntersecting); }).observe(sent);
 
-      try { if (!sessionStorage.getItem('md_intro') && !CL.reduce()) { $('#logo-word').classList.add('intro'); sessionStorage.setItem('md_intro', '1'); } } catch (e) { /* noop */ }
+      // entrada del wordmark: una sola vez por visita
+      try { if (!sessionStorage.getItem('clare_intro') && !CL.reduce()) { $('#logo-word').classList.add('intro'); sessionStorage.setItem('clare_intro', '1'); } } catch (e) { /* noop */ }
 
       document.documentElement.classList.add('reveal-ready');
       CL.render(false);

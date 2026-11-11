@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Set de mesa y silla infantil (ilustración demostrativa)"><title>Set de mesa y silla infantil (ilustración demostrativa)</title><rect width="640" height="640" fill="#F8EFE4"/>
+    <path d="M0 470 H640 V640 H0 Z" fill="#E0C9B1" opacity=".75"/>
+    <path d="M440 60 h110 v200 a55 55 0 0 1 -110 0 z" fill="#8A9880" opacity=".18"/>
+    <circle cx="90" cy="110" r="46" fill="#D9A78F" opacity=".35"/>
+    <ellipse cx="320" cy="545" rx="190" ry="16" fill="#4C3C20" opacity=".1"/><g transform="translate(120 110) scale(1)">
+  <rect x="40" y="170" width="250" height="24" rx="10" fill="#EBD2AE" stroke="#C49A6C" stroke-width="5"/>
+  <rect x="62" y="194" width="18" height="150" rx="5" fill="#DDB98A"/><rect x="250" y="194" width="18" height="150" rx="5" fill="#DDB98A"/>
+  <rect x="330" y="150" width="18" height="140" rx="5" fill="#C49A6C"/>
+  <rect x="300" y="228" width="80" height="18" rx="7" fill="#DDB98A" stroke="#C49A6C" stroke-width="4"/>
+  <rect x="302" y="246" width="14" height="98" rx="4" fill="#C49A6C"/><rect x="364" y="246" width="14" height="98" rx="4" fill="#C49A6C"/>
+  <circle cx="110" cy="158" r="12" fill="#B57D61"/><rect x="150" y="146" width="40" height="24" rx="5" fill="#A1AD96"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

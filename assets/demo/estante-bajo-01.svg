@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Estante bajo para juguetes (ilustración demostrativa)"><title>Estante bajo para juguetes (ilustración demostrativa)</title><rect width="640" height="640" fill="#E9D8C3"/>
+      <circle cx="370" cy="330" r="250" fill="#F8EFE4" opacity=".7"/>
+      <ellipse cx="320" cy="560" rx="170" ry="16" fill="#4C3C20" opacity=".08"/><g transform="translate(120 120) scale(1)">
+  <rect x="50" y="150" width="300" height="190" rx="10" fill="#DDB98A" stroke="#C49A6C" stroke-width="6"/>
+  <rect x="70" y="170" width="125" height="150" rx="6" fill="#F8EFE4"/>
+  <rect x="205" y="170" width="125" height="150" rx="6" fill="#F8EFE4"/>
+  <circle cx="132" cy="296" r="20" fill="#B57D61"/><rect x="100" y="250" width="40" height="26" rx="4" fill="#A1AD96"/>
+  <rect x="226" y="262" width="80" height="48" rx="8" fill="#E0C9B1" stroke="#C49A6C" stroke-width="4"/>
+  <rect x="62" y="340" width="14" height="30" rx="4" fill="#C49A6C"/><rect x="324" y="340" width="14" height="30" rx="4" fill="#C49A6C"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

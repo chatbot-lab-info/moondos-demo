@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Torre de aprendizaje (ilustración demostrativa)"><title>Torre de aprendizaje (ilustración demostrativa)</title><rect width="640" height="640" fill="#E6D3BC"/>
+      <circle cx="370" cy="330" r="250" fill="#F8EFE4" opacity=".7"/>
+      <ellipse cx="320" cy="560" rx="170" ry="16" fill="#4C3C20" opacity=".08"/><g transform="translate(120 120) scale(1)">
+  <rect x="70" y="300" width="260" height="30" rx="8" fill="#DDB98A" stroke="#C49A6C" stroke-width="5"/>
+  <rect x="90" y="220" width="220" height="26" rx="8" fill="#EBD2AE" stroke="#C49A6C" stroke-width="5"/>
+  <rect x="90" y="330" width="20" height="40" rx="4" fill="#C49A6C"/><rect x="290" y="330" width="20" height="40" rx="4" fill="#C49A6C"/>
+  <rect x="100" y="90" width="16" height="140" rx="5" fill="#DDB98A"/><rect x="284" y="90" width="16" height="140" rx="5" fill="#DDB98A"/>
+  <rect x="100" y="90" width="200" height="16" rx="6" fill="#DDB98A"/><rect x="100" y="150" width="200" height="14" rx="6" fill="#C49A6C"/>
+  <rect x="116" y="246" width="12" height="54" fill="#C49A6C"/><rect x="272" y="246" width="12" height="54" fill="#C49A6C"/>
+  <circle cx="200" cy="205" r="0" fill="none"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

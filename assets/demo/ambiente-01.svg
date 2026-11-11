@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Ambiente demo con estante (ilustración demostrativa)"><title>Ambiente demo con estante (ilustración demostrativa)</title><rect width="800" height="600" fill="#F8EFE4"/>
+  <path d="M0 432 H800 V600 H0 Z" fill="#E0C9B1" opacity=".7"/>
+  <path d="M496 40 h112.00000000000001 v240 a56.00000000000001 56.00000000000001 0 0 1 -112.00000000000001 0 z" fill="#A1AD96" opacity=".22"/>
+  <circle cx="96" cy="120" r="72" fill="#D9A78F" opacity=".35"/>
+  <g transform="translate(70 70) scale(1.15)">
+  <rect x="30" y="70" width="340" height="290" rx="12" fill="#DDB98A" stroke="#C49A6C" stroke-width="6"/>
+  <rect x="50" y="90" width="300" height="250" rx="6" fill="#F8EFE4"/>
+  <rect x="50" y="168" width="300" height="9" fill="#C49A6C"/><rect x="50" y="252" width="300" height="9" fill="#C49A6C"/>
+  <path d="M70 168 a30 30 0 0 1 60 0 z" fill="#B57D61"/><path d="M76 168 a24 24 0 0 1 48 0 z" fill="#E5BE6B"/><path d="M84 168 a16 16 0 0 1 32 0 z" fill="#A1AD96"/>
+  <rect x="160" y="130" width="40" height="38" rx="4" fill="#7FA3B5"/><rect x="210" y="142" width="40" height="26" rx="4" fill="#C8694F"/>
+  <rect x="270" y="120" width="60" height="48" rx="6" fill="#EBD2AE" stroke="#C49A6C" stroke-width="3"/>
+  <rect x="64" y="196" width="80" height="56" rx="8" fill="#E0C9B1" stroke="#C49A6C" stroke-width="3"/>
+  <rect x="160" y="200" width="80" height="52" rx="8" fill="#A1AD96" stroke="#8A9880" stroke-width="3"/>
+  <rect x="256" y="196" width="80" height="56" rx="8" fill="#D9A78F" stroke="#B57D61" stroke-width="3"/>
+  <circle cx="110" cy="300" r="22" fill="#8BAA7E"/><rect x="170" y="280" width="60" height="30" rx="6" fill="#E5BE6B"/><rect x="260" y="282" width="62" height="28" rx="6" fill="#7FA3B5"/></g><g transform="translate(490 280) scale(0.6)">
+  <path d="M60 280 H320 Q350 280 350 250 V230 Q350 210 330 210 H250 L230 120 H210 L222 210 H110 Q60 210 60 250 Z" fill="#DDB98A" stroke="#C49A6C" stroke-width="6" stroke-linejoin="round"/>
+  <rect x="198" y="80" width="90" height="16" rx="8" fill="#C49A6C" transform="rotate(-6 243 88)"/>
+  <rect x="100" y="180" width="110" height="22" rx="10" fill="#B57D61"/>
+  <circle cx="110" cy="318" r="40" fill="#A1AD96" stroke="#8A9880" stroke-width="6"/><circle cx="110" cy="318" r="14" fill="#F8EFE4"/>
+  <circle cx="308" cy="318" r="40" fill="#A1AD96" stroke="#8A9880" stroke-width="6"/><circle cx="308" cy="318" r="14" fill="#F8EFE4"/></g><text x="786" y="588" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

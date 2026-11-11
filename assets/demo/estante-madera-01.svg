@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Estante de juguetes de madera (ilustración demostrativa)"><title>Estante de juguetes de madera (ilustración demostrativa)</title><rect width="640" height="640" fill="#DFC9B2"/>
+      <circle cx="270" cy="330" r="250" fill="#F8EFE4" opacity=".7"/>
+      <ellipse cx="320" cy="560" rx="170" ry="16" fill="#4C3C20" opacity=".08"/><g transform="translate(120 120) scale(1)">
+  <rect x="30" y="70" width="340" height="290" rx="12" fill="#DDB98A" stroke="#C49A6C" stroke-width="6"/>
+  <rect x="50" y="90" width="300" height="250" rx="6" fill="#F8EFE4"/>
+  <rect x="50" y="168" width="300" height="9" fill="#C49A6C"/><rect x="50" y="252" width="300" height="9" fill="#C49A6C"/>
+  <path d="M70 168 a30 30 0 0 1 60 0 z" fill="#B57D61"/><path d="M76 168 a24 24 0 0 1 48 0 z" fill="#E5BE6B"/><path d="M84 168 a16 16 0 0 1 32 0 z" fill="#A1AD96"/>
+  <rect x="160" y="130" width="40" height="38" rx="4" fill="#7FA3B5"/><rect x="210" y="142" width="40" height="26" rx="4" fill="#C8694F"/>
+  <rect x="270" y="120" width="60" height="48" rx="6" fill="#EBD2AE" stroke="#C49A6C" stroke-width="3"/>
+  <rect x="64" y="196" width="80" height="56" rx="8" fill="#E0C9B1" stroke="#C49A6C" stroke-width="3"/>
+  <rect x="160" y="200" width="80" height="52" rx="8" fill="#A1AD96" stroke="#8A9880" stroke-width="3"/>
+  <rect x="256" y="196" width="80" height="56" rx="8" fill="#D9A78F" stroke="#B57D61" stroke-width="3"/>
+  <circle cx="110" cy="300" r="22" fill="#8BAA7E"/><rect x="170" y="280" width="60" height="30" rx="6" fill="#E5BE6B"/><rect x="260" y="282" width="62" height="28" rx="6" fill="#7FA3B5"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

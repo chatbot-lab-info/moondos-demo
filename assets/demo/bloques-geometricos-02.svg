@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" role="img" aria-label="Bloques geométricos (ilustración demostrativa)"><title>Bloques geométricos (ilustración demostrativa)</title><rect width="640" height="640" fill="#F8EFE4"/>
+    <path d="M0 470 H640 V640 H0 Z" fill="#E0C9B1" opacity=".75"/>
+    <path d="M440 60 h110 v200 a55 55 0 0 1 -110 0 z" fill="#8A9880" opacity=".18"/>
+    <circle cx="90" cy="110" r="46" fill="#D9A78F" opacity=".35"/>
+    <ellipse cx="320" cy="545" rx="190" ry="16" fill="#4C3C20" opacity=".1"/><g transform="translate(120 110) scale(1)">
+  <path d="M40 330 L120 190 L200 330 Z" fill="#7FA3B5"/>
+  <rect x="150" y="230" width="110" height="100" rx="8" fill="#B57D61"/>
+  <circle cx="300" cy="290" r="46" fill="#E5BE6B"/>
+  <path d="M200 330 a80 80 0 0 1 160 0 z" fill="#A1AD96" transform="translate(0 0)"/>
+  <rect x="226" y="150" width="70" height="80" rx="8" fill="#C8694F" transform="rotate(-10 260 190)"/>
+  <rect x="86" y="120" width="60" height="60" rx="8" fill="#E5BE6B" transform="rotate(14 116 150)"/></g><text x="626" y="628" text-anchor="end" font-family="sans-serif" font-size="14" fill="#4C3C20" opacity=".45">ilustración demo</text></svg>

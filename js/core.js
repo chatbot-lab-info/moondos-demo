@@ -1,12 +1,12 @@
 /* ============================================================
-   MOONDOS — NÚCLEO: utilidades, carrito/guardados, router, scroll, toasts
+   CLARÉ — NÚCLEO: utilidades, carrito/guardados, router, scroll, toasts
    ============================================================ */
 (function () {
   'use strict';
   var CL = (window.CL = {});
-  CL.cfg = window.MD_CONFIG;
-  CL.svc = window.MD_SERVICES;
-  CL.FILE_MODE = true; // rutas con # (funciona igual en GitHub Pages, Netlify o abriendo el archivo)
+  CL.cfg = window.CLARE_CONFIG;
+  CL.svc = window.CLARE_SERVICES;
+  CL.FILE_MODE = location.protocol === 'file:';
 
   var mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   CL.reduce = function () { return mqReduce.matches; };
@@ -76,46 +76,35 @@
   };
   CL.catById = function (id) { return CL.data.categories.filter(function (c) { return c.id === id; })[0]; };
 
-  // ---------- carrito y guardados (solo IDs, presentación y cantidades) ----------
+  // ---------- carrito y guardados (solo IDs, variantes y cantidades) ----------
   var maxQ = CL.cfg.LIMITS.qtyMax;
-  function keyOf(id, v) { return id + '|' + (v || ''); }
-  CL.keyOf = keyOf;
-  function validItem(i) {
-    var p = i && CL.byId[i.id]; if (!p) return false;
-    if (i.variantId && !p.variants.some(function (v) { return v.id === i.variantId; })) return false;
-    return true;
-  }
-  CL.variantOf = function (p, vid) { return vid ? p.variants.filter(function (v) { return v.id === vid; })[0] || null : null; };
-  CL.unitPrice = function (p, vid) { var v = CL.variantOf(p, vid); return v ? v.price : p.priceARS; };
   CL.store = {
     cart: [], saved: [],
     init: function () {
-      var c = lsGet('md_cart', []), s = lsGet('md_saved', []);
-      this.cart = (Array.isArray(c) ? c : []).filter(validItem).map(function (i) {
-        return { k: keyOf(i.id, i.variantId), id: i.id, variantId: i.variantId || null, qty: Math.max(1, Math.min(maxQ, parseInt(i.qty, 10) || 1)) };
-      }).filter(function (i) { return CL.byId[i.id].available; });
+      var c = lsGet('clare_cart', []), s = lsGet('clare_saved', []);
+      this.cart = (Array.isArray(c) ? c : []).filter(function (i) { return i && CL.byId[i.id]; }).map(function (i) {
+        return { id: i.id, variantId: null, qty: Math.max(1, Math.min(maxQ, parseInt(i.qty, 10) || 1)) };
+      });
       this.saved = (Array.isArray(s) ? s : []).filter(function (id) { return CL.byId[id]; });
       this.persist();
     },
-    persist: function () { lsSet('md_cart', this.cart); lsSet('md_saved', this.saved); },
-    find: function (k) { return this.cart.filter(function (i) { return i.k === k; })[0]; },
-    add: function (id, qty, variantId) {
-      qty = Math.max(1, parseInt(qty, 10) || 1); variantId = variantId || null;
-      var p = CL.byId[id]; if (!p || !p.available) return;
-      if (p.variants.length && !variantId) variantId = p.variants[0].id;
-      var k = keyOf(id, variantId), it = this.find(k);
-      if (it) it.qty = Math.min(maxQ, it.qty + qty); else this.cart.push({ k: k, id: id, variantId: variantId, qty: Math.min(maxQ, qty) });
+    persist: function () { lsSet('clare_cart', this.cart); lsSet('clare_saved', this.saved); },
+    find: function (id) { return this.cart.filter(function (i) { return i.id === id; })[0]; },
+    add: function (id, qty) {
+      qty = Math.max(1, parseInt(qty, 10) || 1);
+      var it = this.find(id);
+      if (it) it.qty = Math.min(maxQ, it.qty + qty); else this.cart.push({ id: id, variantId: null, qty: Math.min(maxQ, qty) });
       this.persist();
     },
-    setQty: function (k, qty) {
-      var it = this.find(k); if (!it) return;
+    setQty: function (id, qty) {
+      var it = this.find(id); if (!it) return;
       it.qty = Math.max(1, Math.min(maxQ, parseInt(qty, 10) || 1)); this.persist();
     },
-    remove: function (k) {
-      var it = this.find(k); if (!it) return null;
-      this.cart = this.cart.filter(function (i) { return i.k !== k; }); this.persist(); return { k: it.k, id: it.id, variantId: it.variantId, qty: it.qty };
+    remove: function (id) {
+      var it = this.find(id); if (!it) return null;
+      this.cart = this.cart.filter(function (i) { return i.id !== id; }); this.persist(); return { id: it.id, variantId: null, qty: it.qty };
     },
-    restore: function (item) { if (item && validItem(item) && !this.find(item.k)) { this.cart.push(item); this.persist(); } },
+    restore: function (item) { if (item && CL.byId[item.id] && !this.find(item.id)) { this.cart.push(item); this.persist(); } },
     clear: function () { this.cart = []; this.persist(); },
     count: function () { return this.cart.reduce(function (n, i) { return n + i.qty; }, 0); },
     isSaved: function (id) { return this.saved.indexOf(id) > -1; },
@@ -128,15 +117,18 @@
 
   CL.cartLines = function () {
     return CL.store.cart.map(function (i) {
-      var p = CL.byId[i.id], unit = CL.unitPrice(p, i.variantId), v = CL.variantOf(p, i.variantId);
-      return { k: i.k, p: p, v: v, qty: i.qty, unit: unit, line: unit * i.qty, name: p.name + (v ? ' (' + v.name + ')' : '') };
+      var p = CL.byId[i.id]; return { p: p, qty: i.qty, line: p.priceARS * i.qty };
     });
   };
-  // El panel recalcula todo: acá solo se muestra una estimación (subtotal + envío fijo si corresponde).
-  CL.totals = function (modalidad) {
+  CL.inZone = function (city) {
+    var c = CL.norm(city);
+    return ['santa fe', 'ciudad de santa fe', 'santa fe capital', 'santa fe ciudad'].indexOf(c) > -1;
+  };
+  CL.totals = function (city) {
     var sub = CL.cartLines().reduce(function (n, l) { return n + l.line; }, 0);
-    var ship = modalidad === 'envio' ? (CL.panelConfig && Number(CL.panelConfig.envioFijo) || 0) : 0;
-    return { subtotal: sub, shipping: ship, total: sub + ship };
+    var inZ = CL.inZone(city);
+    var ship = inZ ? CL.cfg.SHIPPING_FEE_ARS : null;
+    return { subtotal: sub, inZone: inZ, shipping: ship, total: sub + (ship || 0) };
   };
 
   // ---------- scroll (Lenis) ----------
@@ -309,6 +301,7 @@
     CL.fixLinks(app);
     if (res.mount) res.mount(app, cur);
     CL.reveal(app);
+    if (CL.doodles) CL.doodles(app);
     if (!CL.reduce()) { void app.offsetWidth; app.classList.add('page-in'); }
 
     CL.scrollTo(restore ? (scrollPos[cur.key] || 0) : 0, true);
@@ -319,6 +312,9 @@
     firstRender = false;
     CL.syncChrome && CL.syncChrome(cur.path);
   };
+
+  // Redibuja la página actual conservando el scroll (cuando llegan datos nuevos del panel en segundo plano).
+  CL.rerender = function () { saveScroll(); CL.render(true); };
 
   CL.fixLinks = function (root) {
     if (!CL.FILE_MODE) return;
