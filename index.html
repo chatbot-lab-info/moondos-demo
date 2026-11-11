@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <!-- Rutas relativas desde la raíz (necesario para /producto/..., /muebles, etc.). Si se abre el archivo con doble clic (file://) se quita. -->
+  <base href="/">
+  <script>if (location.protocol === 'file:') { var b = document.querySelector('base'); if (b) b.remove(); }</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Claré · Muebles y juguetes Montessori (demo)</title>
+  <meta name="description" content="Claré: muebles y juguetes Montessori para chicos. Armá tu pedido y continuá por WhatsApp. Sitio de demostración.">
+  <!-- Demo: no indexar. app.js saca esta etiqueta cuando STORE_MODE = 'produccion'. -->
+  <meta name="robots" content="noindex, nofollow" id="meta-robots">
+  <meta name="theme-color" content="#A1AD96">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Claré · Muebles y juguetes Montessori">
+  <meta property="og:description" content="Armá tu pedido y continuá por WhatsApp con Claré.">
+  <link rel="icon" href="assets/demo/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/quicksand-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/lenis.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+  <a class="skip-link" href="#app" id="skip-link">Saltar al contenido</a>
+
+  <div id="scroll-sentinel" aria-hidden="true"></div>
+
+  <div class="site-top" id="site-top">
+    <div class="demo-strip" id="demo-strip" role="note">
+      <span class="demo-dot" aria-hidden="true"></span> Productos y precios de ejemplo
+    </div>
+
+    <header class="site-header" id="site-header">
+      <div class="header-inner">
+        <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+
+        <a class="logo" href="/" data-r="/" aria-label="Claré, ir al inicio">
+          <span class="logo-word" id="logo-word">Claré</span>
+        </a>
+
+        <nav class="main-nav" aria-label="Principal">
+          <ul>
+            <li class="has-sub" id="nav-muebles">
+              <a href="/muebles" data-r="/muebles">Muebles</a>
+              <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-muebles" aria-label="Mostrar subgrupos de Muebles">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <ul class="submenu" id="sub-muebles"></ul>
+            </li>
+            <li><a href="/juguetes" data-r="/juguetes">Juguetes</a></li>
+            <li><a href="/combos" data-r="/combos">Combos</a></li>
+            <li><a href="/inspiracion" data-r="/inspiracion">Inspiración</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-actions">
+          <button class="icon-btn" id="search-btn" type="button" aria-label="Buscar" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+          </button>
+          <a class="icon-btn heart-link" href="/guardados" data-r="/guardados" aria-label="Guardados">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+            <span class="badge" id="saved-count" hidden>0</span>
+          </a>
+          <a class="icon-btn cart-link" id="cart-btn" href="/carrito" aria-label="Carrito" aria-haspopup="true" aria-expanded="false" aria-controls="mini-cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.4l2.1 11h9.8l1.9-8H6.4"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></svg>
+            <span class="badge" id="cart-count" hidden>0</span>
+          </a>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- Mini carrito (escritorio) -->
+  <div class="mini-cart" id="mini-cart" role="region" aria-label="Vista rápida del carrito" hidden></div>
+
+  <!-- Menú móvil -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="menu-panel" id="menu-panel" role="dialog" aria-modal="true" aria-label="Menú" hidden data-lenis-prevent>
+    <div class="menu-head">
+      <span class="logo-word">Claré</span>
+      <button class="icon-btn" id="menu-close" type="button" aria-label="Cerrar menú">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <nav aria-label="Menú móvil" id="menu-links"></nav>
+  </aside>
+
+  <!-- Búsqueda -->
+  <div class="search-panel" id="search-panel" role="dialog" aria-modal="true" aria-label="Buscar productos" hidden>
+    <div class="search-box" data-lenis-prevent>
+      <form id="search-form" role="search" autocomplete="off">
+        <label class="sr-only" for="search-input">Buscar productos</label>
+        <input id="search-input" type="search" placeholder="Buscar muebles, juguetes, combos…" maxlength="60" enterkeyhint="search">
+        <button class="btn btn-small" type="submit">Buscar</button>
+        <button class="icon-btn" id="search-close" type="button" aria-label="Cerrar búsqueda">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </form>
+      <div id="search-suggest"></div>
+    </div>
+  </div>
+
+  <main id="app" tabindex="-1" aria-live="off">
+    <div class="boot" aria-hidden="true"><span class="boot-dot"></span></div>
+    <noscript><p class="noscript">Esta tienda necesita JavaScript para mostrar los productos.</p></noscript>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <!-- Barra inferior móvil -->
+  <nav class="dock" id="dock" aria-label="Accesos rápidos">
+    <a href="/" data-r="/" data-dock="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>Inicio</span>
+    </a>
+    <a href="/guardados" data-r="/guardados" data-dock="saved">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span>Guardados</span><i class="badge" id="dock-saved" hidden>0</i>
+    </a>
+    <button type="button" id="dock-cats" aria-haspopup="dialog" data-dock="cats">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span>Categorías</span>
+    </button>
+    <a href="/carrito" data-r="/carrito" data-dock="cart">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.4l2.1 11h9.8l1.9-8H6.4"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></svg><span>Carrito</span><i class="badge" id="dock-cart" hidden>0</i>
+    </a>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/vendor/lenis.min.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

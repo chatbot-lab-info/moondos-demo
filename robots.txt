@@ -1,0 +1,5 @@
+# DEMO: no indexar. Cuando la tienda pase a producción real, cambiar por:
+# User-agent: *
+# Allow: /
+User-agent: *
+Disallow: /
