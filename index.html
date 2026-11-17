@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <!-- Rutas relativas desde la raíz (necesario para /producto/..., /muebles, etc.). Si se abre el archivo con doble clic (file://) se quita. -->
   <base href="/">
-  <script>if (location.protocol === 'file:') { var b = document.querySelector('base'); if (b) b.remove(); }</script>
+  <script>if (location.protocol === 'file:' || /\.github\.io$/.test(location.hostname)) { var b = document.querySelector('base'); if (b) b.remove(); }</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Claré · Muebles y juguetes Montessori (demo)</title>
   <meta name="description" content="Claré: muebles y juguetes Montessori para chicos. Armá tu pedido y continuá por WhatsApp. Sitio de demostración.">

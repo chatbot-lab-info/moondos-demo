@@ -6,7 +6,7 @@
   var CL = (window.CL = {});
   CL.cfg = window.CLARE_CONFIG;
   CL.svc = window.CLARE_SERVICES;
-  CL.FILE_MODE = location.protocol === 'file:';
+  CL.FILE_MODE = location.protocol === 'file:' || /\.github\.io$/.test(location.hostname); // GitHub Pages cuelga el sitio de /moondos-demo/: rutas con # y sin base
 
   var mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   CL.reduce = function () { return mqReduce.matches; };
