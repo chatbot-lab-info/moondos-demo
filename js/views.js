@@ -134,7 +134,7 @@
     var needIcons = { book: 'book', blocks: 'blocks', step: 'step' };
     var html =
       '<section class="hero" id="hero" aria-labelledby="hero-title">' +
-        '<div class="hero-shapes" aria-hidden="true"><span class="hb hb-swirl"></span><span class="hb hb-sandr"></span><span class="hb hb-sand"></span><span class="hb hb-sage"></span><span class="hb hb-terral"></span></div>' +
+        '<div class="hero-shapes" aria-hidden="true"><span class="hb hb-swirl"></span><span class="hb hb-sandr"></span><span class="hb hb-sand"></span><span class="hb hb-sage"></span><span class="hb hb-sky"></span><span class="hb hb-terral"></span></div>' +
         '<div class="hero-photo"><div class="hero-frame">' + img('assets/hero/hero-photo.jpg', 'Niño jugando con bloques de madera sobre una mesa baja', 1500, 1120, true) + '</div></div>' +
         '<div class="hero-shapes front" aria-hidden="true"><span class="hb hb-terra"></span></div>' +
         '<div class="hero-inner">' +

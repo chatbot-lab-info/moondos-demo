@@ -207,7 +207,7 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
 .head-img img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; overflow: clip; background: #FBF0DC; height: min(46.5vw, calc(100svh - 118px)); min-height: 520px; --px: 0; --py: 0; --sy: 0; }
+.hero { position: relative; overflow: clip; background: var(--bg); height: min(46.5vw, calc(100svh - 118px)); min-height: 520px; --px: 0; --py: 0; --sy: 0; }
 .hero-shapes { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 .hb { position: absolute; inset: 0; display: block; background-size: cover; background-position: center; background-repeat: no-repeat; will-change: transform;
   transform: translate3d(calc(var(--px) * var(--kx) * 1px), calc(var(--py) * var(--ky) * 1px + var(--sy) * var(--ks) * 1px), 0) scale(1.04); }
@@ -216,6 +216,7 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
 .hb-sandr { background-image: url('../assets/hero/hero-sandr.svg'); --kx: 8; --ky: -2; --ks: 3; }
 .hb-sand { background-image: url('../assets/hero/hero-sand.svg'); --kx: -4; --ky: 2; --ks: 1; }
 .hb-sage { background-image: url('../assets/hero/hero-sage.svg'); --kx: 5; --ky: 3; --ks: 2; }
+.hb-sky { background-image: url('../assets/hero/hero-sky.svg'); --kx: 6; --ky: 2; --ks: 3; }
 .hb-terral { background-image: url('../assets/hero/hero-terral.svg'); --kx: 8; --ky: 3; --ks: 4; }
 .hb-terra { background-image: url('../assets/hero/hero-terra.svg'); --kx: -10; --ky: -3; --ks: 4; }
 .hero-inner { position: relative; z-index: 3; height: 100%; display: flex; align-items: center; padding-inline: var(--edge); }
@@ -241,6 +242,7 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
   .js .hb-sand { animation: slideIn 1.2s var(--ease) both .0s; --fx: -40px; --fy: 20px; }
   .js .hb-sage { animation: slideIn 1.2s var(--ease) both .1s; --fx: -60px; --fy: -50px; }
   .js .hb-terral { animation: slideIn 1.2s var(--ease) both .22s; --fx: 0px; --fy: 70px; }
+.js .hb-sky { animation: slideIn 1.2s var(--ease) both .18s; --fx: -60px; --fy: 60px; }
   .js .hb-terra { animation: slideIn 1.3s var(--ease) both .3s; --fx: 70px; --fy: 70px; }
   @keyframes fromLeft { from { opacity: 0; transform: translateX(calc(-1 * (var(--edge) + 100%))); } 35% { opacity: 1; } to { opacity: 1; transform: none; } }
   @keyframes frameIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
