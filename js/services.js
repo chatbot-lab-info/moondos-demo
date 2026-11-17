@@ -41,6 +41,7 @@
       (cat.subcategories || []).forEach(function (s) { if (norm(s.name) === n) f = s.id; });
       return f;
     }
+    function precioDe(r) { var n = Number(r.precioBase != null && r.precioBase !== '' ? r.precioBase : r.precio); return n > 0 ? n : 0; }
     function availability(r) { return r.estadoStock === 'sin_stock' ? 'agotado' : (r.estadoStock === 'proximamente' ? 'proximamente' : 'disponible'); }
     function isDemoUrl(u) { return !u || /\/assets\/demo\//.test(u); }
 
@@ -49,7 +50,7 @@
       var r = rows[fx.slug]; if (!r) return;                     // quitado del panel = no se muestra
       used[fx.slug] = true;
       var p = JSON.parse(JSON.stringify(fx));
-      p.name = r.nombre || fx.name; p.priceARS = Number(r.precio) || 0; p.availability = availability(r); p.status = 'panel';
+      p.name = r.nombre || fx.name; p.priceARS = precioDe(r); p.availability = availability(r); p.status = 'panel';
       var cat = catByName[norm(r.categoria)];
       if (cat && cat.id !== fx.categoryId) { p.categoryId = cat.id; p.subcategoryId = null; }
       // Foto cargada en el panel: pasa a ser la única foto (la ilustración demo de la 2.ª posición no se mezcla con fotos reales).
@@ -63,7 +64,7 @@
       var r = rows[id], cat = catByName[norm(r.categoria)]; if (!cat) return;   // categoría que la web no tiene: no se muestra
       out.push({
         id: 'panel-' + id, slug: id, name: r.nombre, shortDescription: r.descripcion || '', description: r.descripcion || '',
-        categoryId: cat.id, subcategoryId: subIdFor(cat, r), priceARS: Number(r.precio) || 0, currency: 'ARS',
+        categoryId: cat.id, subcategoryId: subIdFor(cat, r), priceARS: precioDe(r), currency: 'ARS',
         images: [{ url: r.imagenUrl || 'assets/demo/ambiente-01.svg', alt: r.nombre }],
         variants: [], bundleItems: [], collectionTags: [],
         specifications: { materials: null, dimensions: null, finish: null, assembly: null, care: null, recommendedStage: null },

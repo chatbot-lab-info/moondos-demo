@@ -125,7 +125,7 @@
   // ---------- footer ----------
   function paintFooter() {
     var D = CL.data;
-    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="MOONDOS"><use href="#clare-logo"/></svg>' +
+    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><img class="logo-svg logo-dark" src="assets/brand/moondos-logo-verde.png" alt="MOONDOS" width="900" height="245">' +
       '<p>Regalería en Santa Fe. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
       '<nav class="foot-col" aria-label="Tienda"><h2>Tienda</h2><ul>' + D.categories.map(function (c) { return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>'; }).join('') +
       '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li></li></ul></nav>' +
