@@ -11,7 +11,7 @@ window.CLARE_CONFIG = {
 
   // URL pública del Web App de Apps Script (/exec) del panel Claré: de ahí salen precios, fotos y stock, y ahí entran los pedidos.
   // No es un secreto (es una dirección pública). Vacía = adaptador demo (no se envía nada a ningún lado).
-  GAS_WEB_APP_URL: '',
+  GAS_WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbyxd8NZMg4H-TLWVzY2pQlMa4xvIMhaoRqwjL70_U7no25orFm-QhOtuoXQeiSbzieD/exec',
 
   // 'remote' = catálogo desde el panel (precio, foto, stock y nombre mandan desde el panel; los textos editoriales siguen en js/data.js).
   // 'fixtures' = solo datos demo de js/data.js (no consulta al panel).
