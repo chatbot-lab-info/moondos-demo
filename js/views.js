@@ -39,8 +39,8 @@
     D.products.forEach(function (p) { if (pick.length < 2 && pick.indexOf(p) < 0 && p.categoryId !== 'combos') pick.push(p); });
     if (!pick.length) return '';
     var fromPanel = pick.every(function (p) { return p.status === 'panel'; });
-    return '<section class="wrap block" aria-labelledby="amb-t">' + head('Ambientes Claré').replace('<h2>', '<h2 id="amb-t">') +
-      (fromPanel ? '' : '<p class="note" data-reveal>Imágenes demostrativas. Se reemplazan por fotos autorizadas de Claré antes de publicar.</p>') +
+    return '<section class="wrap block" aria-labelledby="amb-t">' + head('Ambientes MOONDOS').replace('<h2>', '<h2 id="amb-t">') +
+      (fromPanel ? '' : '<p class="note" data-reveal>Imágenes demostrativas. Se reemplazan por fotos autorizadas de MOONDOS antes de publicar.</p>') +
       '<div class="amb-grid">' + pick.map(function (p) {
         return '<figure class="amb" data-reveal>' + img(p.images[0].url, p.name + (p.status === 'panel' ? '' : ' (ilustración demostrativa)'), 800, 600) +
           '<figcaption><a' + link('/producto/' + p.slug) + '>Ver ' + esc(p.name) + ' ' + icon('arrow') + '</a></figcaption></figure>';
@@ -79,7 +79,7 @@
   }
 
   function decoField() { return ''; }
-  // Sección "Sobre Claré": réplica del bloque "Sobre Nosotros" del moodboard (manchas, contenedor de foto en forma de huevo, garabatos)
+  // Sección "Sobre MOONDOS": réplica del bloque "Sobre Nosotros" del moodboard (manchas, contenedor de foto en forma de huevo, garabatos)
   function aboutCard(o) {
     var D = [ // [tipo, centro x %, centro y %, tamaño en % del ancho]
       ['star', 49.9, 25, 4.6], ['star', 55, 17.5, 3.5], ['star', 54.5, 28, 2.8], ['heart', 59.2, 24.8, 2.2], ['heart', 50.9, 38, 2.6],
@@ -96,7 +96,7 @@
       dd +
       '<div class="about-copy">' + (o.pre || '') + '<' + o.h + ' id="brand-t">' + esc(o.title) + '</' + o.h + '>' +
         '<p>' + esc(o.text) + '</p>' +
-        '<a class="btn about-btn"' + link('/muebles') + '>Ver productos</a></div>' +
+        '<a class="btn about-btn"' + link('/productos') + '>Ver productos</a></div>' +
     '</div></section>';
   }
   function aboutMotion(root) {
@@ -117,7 +117,7 @@
   function shapes() { return '<div class="band-shapes" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>'; }
   function shipNote() { return 'Envío ' + (cfg.STORE_MODE === 'produccion' ? '' : 'demo ') + fmt(cfg.SHIPPING_FEE_ARS) + ' dentro de la ciudad de ' + cfg.SHIPPING_CITY + '. El pago y la entrega se coordinan por WhatsApp.'; }
   function waNumberNote() {
-    return cfg.WHATSAPP_PHONE_E164 ? '' : '<p class="notice notice-demo">Demo: el número de WhatsApp de Claré todavía está pendiente de confirmar, por eso WhatsApp te va a pedir elegir un contacto.</p>';
+    return cfg.WHATSAPP_PHONE_E164 ? '' : '<p class="notice notice-demo">Demo: el número de WhatsApp de MOONDOS todavía está pendiente de confirmar, por eso WhatsApp te va a pedir elegir un contacto.</p>';
   }
   function emptyState(title, text, actions) {
     return '<div class="empty" data-reveal>' + deco('heart', 'empty-deco') + '<h2>' + esc(title) + '</h2><p>' + esc(text) + '</p><div class="empty-actions">' + (actions || '') + '</div></div>';
@@ -129,8 +129,8 @@
   // ============================================================
   V.home = function () {
     var D = CL.data;
-    var featured = D.products.filter(function (p) { return p.featured; }).slice(0, 4);
-    var combos = D.products.filter(function (p) { return p.categoryId === 'combos'; });
+    var featured = D.products.filter(function (p) { return p.featured; }).sort(function (a, b) { return a.sortOrder - b.sortOrder; }).slice(0, 8);
+    var navidad = D.products.filter(function (p) { return p.categoryId === 'navidad'; }).slice(0, 6);
     var needIcons = { book: 'book', blocks: 'blocks', step: 'step' };
     var html =
       '<section class="hero" id="hero" aria-labelledby="hero-title">' +
@@ -138,39 +138,27 @@
         '<div class="hero-photo"><div class="hero-frame">' + img('assets/hero/hero-photo.jpg', 'Niño jugando con bloques de madera sobre una mesa baja', 1500, 1120, true) + '</div></div>' +
         '<div class="hero-shapes front" aria-hidden="true"><span class="hb hb-terra"></span></div>' +
         '<div class="hero-inner">' +
-          '<div class="hero-copy"><h1 id="hero-title">Acompaña su crecimiento</h1>' +
-            '<p class="lead">Muebles y objetos para descubrir, jugar y ganar autonomía</p>' +
-            '<div class="hero-cta"><a class="btn btn-lg" href="#destacados" data-scroll="#destacados">Ver productos</a><a class="btn btn-ghost btn-lg"' + link('/combos') + '>Explorar combos</a></div></div>' +
+          '<div class="hero-copy"><h1 id="hero-title">Regalos para sacar sonrisas</h1>' +
+            '<p class="lead">Bazar, aromas, librería, textil y mucho más. Desde 2019</p>' +
+            '<div class="hero-cta"><a class="btn btn-lg" href="#destacados" data-scroll="#destacados">Ver productos</a><a class="btn btn-ghost btn-lg"' + link('/navidad') + '>Calendario de adviento</a></div></div>' +
         '</div>' +
         '<div class="hero-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
       '</section>' +
 
-      '<section class="wrap block needs" aria-labelledby="needs-t">' + decoField() +
-        '<h2 id="needs-t" class="sr-only">Accesos por necesidad</h2><div class="needs-grid">' +
-        D.needs.map(function (n) {
-          return '<a class="need" data-reveal' + link('/coleccion/' + n.collection) + '><span class="need-ic">' + icon(needIcons[n.icon]) + '</span><span class="need-name">' + esc(n.name) + '</span>' +
-            '<svg class="scribble" viewBox="0 0 120 12" aria-hidden="true"><path pathLength="1" d="M3 7c10-6 18 6 28 0s18 6 28 0 18 6 28 0 18 4 30-1"/></svg></a>';
-        }).join('') + '</div></section>' +
+      '<section class="wrap block" id="destacados" aria-labelledby="dest-t">' + head('Productos destacados', '/productos', 'Ver todos los productos').replace('<h2>', '<h2 id="dest-t">') + grid(featured) + '</section>' +
 
-      '<section class="wrap block" id="destacados" aria-labelledby="dest-t">' + head('Productos destacados', '/muebles', 'Ver todos los muebles').replace('<h2>', '<h2 id="dest-t">') + grid(featured) + '</section>' +
+      (navidad.length ? '<section class="wrap block" aria-labelledby="combos-t">' + head('Navidad y calendario de adviento', '/navidad', 'Ver Navidad').replace('<h2>', '<h2 id="combos-t">') +
+        '<div class="grid grid-3">' + navidad.map(function (p) { return productCard(p); }).join('') + '</div></section>' : '') +
 
-      '<section class="wrap block" aria-labelledby="combos-t">' + head('Combos para cada espacio', '/combos', 'Ver combos').replace('<h2>', '<h2 id="combos-t">') +
-        '<div class="grid grid-3">' + combos.map(function (p) { return productCard(p, { includes: true }); }).join('') + '</div></section>' +
-
-      ambientesHTML(D) +
-
-      '<section class="wrap block" aria-labelledby="insp-t">' + head('Inspiración', '/inspiracion', 'Ver guías').replace('<h2>', '<h2 id="insp-t">') +
-        '<div class="grid grid-3">' + D.articles.map(articleCard).join('') + '</div></section>' +
-
-      aboutCard({ h: 'h2', title: 'Sobre Claré', text: 'Texto de marca pendiente. Esta sección se completa con la historia real que Claré comparta.' }) +
+      aboutCard({ h: 'h2', title: 'Sobre MOONDOS', text: 'Regalería en Santa Fe, desde 2019 sacando sonrisas. Local en San Martín 1798.' }) +
 
       '<section class="wrap block strip" aria-label="Cómo comprar"><ul>' +
-        '<li data-reveal><strong>Pedí por WhatsApp</strong><span>Armás el carrito y seguís la conversación con Claré.</span></li>' +
+        '<li data-reveal><strong>Pedí por WhatsApp</strong><span>Armás el carrito y seguís la conversación con MOONDOS.</span></li>' +
         '<li data-reveal><strong>Envío ' + (cfg.STORE_MODE === 'produccion' ? '' : 'demo ') + fmt(cfg.SHIPPING_FEE_ARS) + '</strong><span>Dentro de la ciudad de ' + esc(cfg.SHIPPING_CITY) + '.</span></li>' +
-        '<li data-reveal><strong>Pagos, cambios y garantía</strong><span>A confirmar por Claré.</span></li>' +
+        '<li data-reveal><strong>15% de descuento</strong><span>Pagando con efectivo.</span></li>' +
       '</ul></section>';
     return {
-      title: 'Muebles y juguetes Montessori', description: 'Muebles y juguetes Montessori para chicos. Armá tu pedido y continuá por WhatsApp con Claré.', html: html,
+      title: 'Regalería en Santa Fe', description: 'Bazar, aromas, librería, textil y más. Armá tu pedido y continuá por WhatsApp con MOONDOS.', html: html,
       mount: function (root) { heroMotion(root); aboutMotion(root); }
     };
   };
@@ -244,7 +232,7 @@
       '<section class="page-head band">' + shapes() + '<div class="wrap head-inner"><div class="head-copy">' +
         crumbs([{ name: 'Inicio', path: '/' }, { name: o.crumb }]) +
         '<h1>' + esc(o.h1) + '</h1><p class="lead">' + esc(o.description) + '</p>' +
-        (o.activeLabel ? '<p class="active-filter">Filtro activo: <strong>' + esc(o.activeLabel) + '</strong> <a' + link(o.clearPath || '/muebles') + '>Quitar filtro</a></p>' : '') +
+        (o.activeLabel ? '<p class="active-filter">Filtro activo: <strong>' + esc(o.activeLabel) + '</strong> <a' + link(o.clearPath || '/productos') + '>Quitar filtro</a></p>' : '') +
         '</div><figure class="head-img">' + img(o.image, o.h1 + ' (ilustración demostrativa)', 1200, 560, true) + '</figure></div></section>' +
       '<div class="wrap listing">' + decoField() +
         '<div class="toolbar">' +
@@ -264,7 +252,7 @@
         '<div id="grid-wrap" class="grid-wrap"></div>' +
         '<nav class="other-links" aria-label="Otras categorías" data-reveal><p>Seguí explorando:</p>' +
           CL.data.categories.filter(function (c) { return c.id !== o.categoryId; }).map(function (c) { return '<a class="chip chip-link"' + link('/' + c.slug) + '>' + esc(c.name) + '</a>'; }).join('') +
-          '<a class="chip chip-link"' + link('/por-etapa') + '>Por etapa</a></nav>' +
+          '</nav>' +
       '</div>';
 
     function mount(root) {
@@ -330,12 +318,15 @@
     return function (m, q) {
       var c = CL.catById(id);
       return listing({
-        basePath: '/' + c.slug, crumb: c.name, categoryId: c.id, h1: c.title, description: c.description, image: c.image,
-        products: CL.data.products.filter(function (p) { return p.categoryId === c.id; }), subs: c.subcategories, moments: true
+        basePath: '/' + c.slug, crumb: c.name, categoryId: c.id, h1: c.title, description: c.description, image: (CL.data.products.filter(function (p) { return p.categoryId === c.id; })[0] || { images: [{ url: c.image }] }).images[0].url,
+        products: CL.data.products.filter(function (p) { return p.categoryId === c.id; }), subs: c.subcategories, moments: false
       }, q);
     };
   }
-  V.muebles = categoryView('muebles'); V.juguetes = categoryView('juguetes'); V.combos = categoryView('combos');
+  V.productos = function (m, q) {
+    return listing({ basePath: '/productos', crumb: 'Productos', h1: 'Todos los productos', description: 'Todo lo que hay en MOONDOS.', image: 'assets/demo/cat-combos.svg',
+      products: CL.data.products, subs: [], moments: false }, q);
+  };
 
   V.coleccion = function (m, q) {
     var col = CL.data.collections.filter(function (c) { return c.id === m[1]; })[0];
@@ -343,7 +334,7 @@
     return listing({
       basePath: '/coleccion/' + col.id, crumb: col.name, h1: col.name, description: col.description, image: 'assets/demo/cat-coleccion.svg',
       products: CL.data.products.filter(function (p) { return p.collectionTags.indexOf(col.id) > -1; }),
-      subs: [], moments: false, activeLabel: col.name, clearPath: '/muebles'
+      subs: [], moments: false, activeLabel: col.name, clearPath: '/productos'
     }, q);
   };
 
@@ -380,7 +371,7 @@
       (res.length ? grid(res) : (term ? emptyState('No encontramos productos para esa búsqueda', 'Probá con otra palabra o mirá las categorías.',
         CL.data.categories.map(function (c) { return '<a class="chip chip-link"' + link('/' + c.slug) + '>' + esc(c.name) + '</a>'; }).join('')) : '')) + '</div>';
     return {
-      title: term ? 'Buscar: ' + term : 'Buscar', description: 'Buscar productos en Claré.', html: html,
+      title: term ? 'Buscar: ' + term : 'Buscar', description: 'Buscar productos en MOONDOS.', html: html,
       mount: function (root) {
         $('#page-search', root).addEventListener('submit', function (e) { e.preventDefault(); var v = $('#ps-input', root).value.trim(); CL.navigate('/buscar' + (v ? '?q=' + encodeURIComponent(v) : '')); });
       }
@@ -397,7 +388,7 @@
         var wrap = $('#saved-wrap', root);
         function paint() {
           var l = byIds(CL.store.saved);
-          wrap.innerHTML = l.length ? grid(l, 'saved-grid') : emptyState('Todavía no guardaste nada', 'Tocá el corazón de un producto para guardarlo y verlo más tarde.', '<a class="btn"' + link('/muebles') + '>Explorar muebles</a><a class="btn btn-soft"' + link('/juguetes') + '>Explorar juguetes</a>');
+          wrap.innerHTML = l.length ? grid(l, 'saved-grid') : emptyState('Todavía no guardaste nada', 'Tocá el corazón de un producto para guardarlo y verlo más tarde.', '<a class="btn"' + link('/productos') + '>Explorar muebles</a><a class="btn btn-soft"' + link('/juguetes') + '>Explorar juguetes</a>');
           CL.fixLinks(wrap); CL.reveal(wrap);
         }
         paint();
@@ -421,7 +412,7 @@
       bundle = '<div class="bundle"><h2>Incluye</h2><ul>' + p.bundleItems.map(function (b) {
         var bp = b.productId && CL.byId[b.productId];
         return '<li>' + (bp ? '<a' + link('/producto/' + bp.slug) + '>' + esc(b.name) + '</a>' : esc(b.name)) + (b.qty > 1 ? ' × ' + b.qty : '') + '</li>';
-      }).join('') + '</ul><p class="note">Composición ilustrativa, a revisar con Claré. No hay descuentos ni precios de oferta.</p></div>';
+      }).join('') + '</ul><p class="note">Composición ilustrativa, a revisar con MOONDOS. No hay descuentos ni precios de oferta.</p></div>';
     }
     var crumbItems = [{ name: 'Inicio', path: '/' }, { name: c.name, path: '/' + c.slug }, { name: p.name }];
     var thumbs = p.images.length > 1 ? '<div class="thumbs">' + p.images.map(function (im, i) {
@@ -444,7 +435,7 @@
           bundle +
           '<div class="desc"><h2>Descripción</h2><p>' + esc(p.description) + '</p></div>' +
           '<div class="specs"><h2>Especificaciones</h2><dl>' + SPEC_LABELS.map(function (s) {
-            var v = p.specifications[s[0]]; return '<div><dt>' + s[1] + '</dt><dd' + (v ? '' : ' class="pending"') + '>' + (v ? esc(v) : 'A confirmar por Claré') + '</dd></div>';
+            var v = p.specifications[s[0]]; return '<div><dt>' + s[1] + '</dt><dd' + (v ? '' : ' class="pending"') + '>' + (v ? esc(v) : 'A confirmar por MOONDOS') + '</dd></div>';
           }).join('') + '</dl></div>' +
         '</div>' +
       '</div>' +
@@ -574,7 +565,7 @@
     function build(root) {
       var box = $('#cart-root', root), lines = CL.cartLines();
       if (!lines.length) {
-        box.innerHTML = emptyState('Tu carrito está vacío', 'Sumá productos para armar tu pedido.', '<a class="btn"' + link('/muebles') + '>Explorar muebles</a><a class="btn btn-soft"' + link('/juguetes') + '>Explorar juguetes</a><a class="btn btn-soft"' + link('/combos') + '>Ver combos</a>');
+        box.innerHTML = emptyState('Tu carrito está vacío', 'Sumá productos para armar tu pedido.', '<a class="btn"' + link('/productos') + '>Explorar muebles</a><a class="btn btn-soft"' + link('/juguetes') + '>Explorar juguetes</a><a class="btn btn-soft"' + link('/combos') + '>Ver combos</a>');
         CL.fixLinks(box); CL.reveal(box); return;
       }
       box.innerHTML = '<p class="note demo-note">' + (cfg.STORE_MODE === 'produccion' ? '' : 'Productos y precios de ejemplo. ') + 'No hay cobro online: el pago se coordina por WhatsApp.</p>' +
@@ -589,7 +580,7 @@
           '<p class="field-hint zone-hint" id="zone-hint" hidden>Fuera de la ciudad de ' + esc(cfg.SHIPPING_CITY) + ' el envío se coordina por WhatsApp.</p>' +
           field('notes', 'Referencias o instrucciones', '', { textarea: true, optional: true }) +
           '<div class="hp" aria-hidden="true"><label>No completar este campo <input type="text" name="website" id="f-website" tabindex="-1" autocomplete="off"></label></div>' +
-          '<div class="field check" data-field="consent"><label><input type="checkbox" id="f-consent" name="consent" aria-describedby="e-consent" required> <span>Acepto que Claré use estos datos para gestionar mi pedido. <a' + link('/privacidad') + '>Política de privacidad</a> (pendiente de revisión).</span></label><p class="field-error" id="e-consent"></p></div>' +
+          '<div class="field check" data-field="consent"><label><input type="checkbox" id="f-consent" name="consent" aria-describedby="e-consent" required> <span>Acepto que MOONDOS use estos datos para gestionar mi pedido. <a' + link('/privacidad') + '>Política de privacidad</a> (pendiente de revisión).</span></label><p class="field-error" id="e-consent"></p></div>' +
           '<p class="form-status" id="form-status" role="alert"></p>' +
         '</form></div>' +
         '<aside class="cart-summary" aria-label="Resumen del pedido"><h2>Resumen</h2><dl>' +
@@ -598,8 +589,8 @@
           '<div class="total"><dt id="s-total-l">Total</dt><dd id="s-total" data-v="0">$0</dd></div></dl>' +
           '<p class="note" id="s-note"></p>' + waNumberNote() +
           '<button type="submit" form="order-form" class="btn btn-lg btn-wa" id="submit-btn">' + icon('whatsapp') + ' <span class="lbl">Enviar pedido por WhatsApp</span></button>' +
-          '<p class="fine">Se abre WhatsApp con el mensaje preparado. Tenés que tocar “Enviar” allá para que Claré lo reciba.</p>' +
-          '<a class="more"' + link('/muebles') + '>Seguir comprando</a></aside></div>';
+          '<p class="fine">Se abre WhatsApp con el mensaje preparado. Tenés que tocar “Enviar” allá para que MOONDOS lo reciba.</p>' +
+          '<a class="more"' + link('/productos') + '>Seguir comprando</a></aside></div>';
       CL.fixLinks(box);
       refresh();
       bindForm(root);
@@ -614,7 +605,7 @@
       $('#s-ship').textContent = t.inZone ? fmt(t.shipping) : 'A coordinar por WhatsApp';
       $('#s-total-l').textContent = t.inZone ? ('Total' + (demo ? ' demo' : '')) : 'Total parcial (sin envío)';
       CL.tween($('#s-total'), t.total, fmt);
-      $('#s-note').textContent = t.inZone ? '' : 'El costo de envío fuera de la ciudad se confirma con Claré.';
+      $('#s-note').textContent = t.inZone ? '' : 'El costo de envío fuera de la ciudad se confirma con MOONDOS.';
       $$('.cart-line').forEach(function (li) {
         var it = CL.store.find(li.getAttribute('data-id')); if (!it) return;
         var inp = $('[data-line-qty]', li); if (document.activeElement !== inp) inp.value = it.qty;
@@ -740,23 +731,23 @@
     var o = null; try { o = JSON.parse(sessionStorage.getItem('clare_last_order')); } catch (e) { o = null; }
     var auto = !!CL.pendingAutoOpen; CL.pendingAutoOpen = false;
     if (!o) {
-      return { title: 'Pedido', description: 'Pedido preparado.', html: '<div class="wrap block page-simple">' + emptyState('No hay un pedido preparado', 'Si querés armar uno, sumá productos al carrito.', '<a class="btn"' + link('/muebles') + '>Explorar productos</a>') + '</div>' };
+      return { title: 'Pedido', description: 'Pedido preparado.', html: '<div class="wrap block page-simple">' + emptyState('No hay un pedido preparado', 'Si querés armar uno, sumá productos al carrito.', '<a class="btn"' + link('/productos') + '>Explorar productos</a>') + '</div>' };
     }
     var d = o.demo ? ' demo' : '';
     var note = o.queueMode === 'demo-simulado'
       ? 'Modo demo: este pedido no se envió a ningún panel.'
-      : (o.queued ? 'Se inició el envío de los datos del pedido a Claré en segundo plano. Este sitio no puede confirmar que se haya registrado.' : 'No pudimos iniciar el envío en segundo plano. Igual podés continuar por WhatsApp.');
+      : (o.queued ? 'Se inició el envío de los datos del pedido a MOONDOS en segundo plano. Este sitio no puede confirmar que se haya registrado.' : 'No pudimos iniciar el envío en segundo plano. Igual podés continuar por WhatsApp.');
     var html = '<div class="wrap block prepared">' +
       '<div class="prepared-card' + (auto ? ' celebrate' : '') + '">' +
         (auto ? '<div class="confetti" aria-hidden="true">' + [1, 2, 3, 4, 5, 6].map(function (i) { return deco(i % 2 ? 'star' : 'heart', 'cf c' + i); }).join('') + '</div>' : '') +
         '<h1>Pedido preparado</h1>' +
-        '<p class="lead">Tu pedido está preparado. Ahora podés enviarlo por WhatsApp para coordinar el pago y la entrega con Claré.</p>' +
+        '<p class="lead">Tu pedido está preparado. Ahora podés enviarlo por WhatsApp para coordinar el pago y la entrega con MOONDOS.</p>' +
         '<p class="ref">Referencia: <strong>' + esc(o.ref) + '</strong> <span>(es solo una referencia, no una confirmación)</span></p>' +
         '<ul class="sum-lines">' + o.lines.map(function (l) { return '<li>' + esc(l.name) + ' × ' + l.qty + '</li>'; }).join('') + '</ul>' +
         '<dl class="sum-totals"><div><dt>Subtotal</dt><dd>' + fmt(o.subtotal) + '</dd></div>' +
         '<div><dt>Envío' + d + '</dt><dd>' + (o.inZone ? fmt(o.shipping) : 'A coordinar') + '</dd></div>' +
         '<div class="total"><dt>' + (o.inZone ? 'Total' + d : 'Total parcial (sin envío)') + '</dt><dd>' + fmt(o.total) + '</dd></div></dl>' +
-        '<p class="notice">Tenés que tocar “Enviar” dentro de WhatsApp para que Claré reciba el mensaje.</p>' +
+        '<p class="notice">Tenés que tocar “Enviar” dentro de WhatsApp para que MOONDOS reciba el mensaje.</p>' +
         '<p class="note">' + esc(note) + '</p>' + waNumberNote() +
         '<p class="auto-msg" id="auto-msg" role="status" aria-live="polite">' + (auto ? 'Abriendo WhatsApp…' : '') + '</p>' +
         '<div class="prepared-actions"><a class="btn btn-lg btn-wa" id="wa-open" href="' + esc(o.waLink) + '">' + icon('whatsapp') + ' Abrir WhatsApp</a>' +
@@ -788,7 +779,7 @@
   // ============================================================
   V.inspiracion = function () {
     var html = '<section class="page-head band">' + shapes() + '<div class="wrap head-inner"><div class="head-copy">' + crumbs([{ name: 'Inicio', path: '/' }, { name: 'Inspiración' }]) +
-      '<h1>Momentos Claré: ideas para el hogar</h1><p class="lead">Ideas generales para pensar espacios de juego, lectura y descanso. Contenido demostrativo.</p></div>' +
+      '<h1>Momentos MOONDOS: ideas para el hogar</h1><p class="lead">Ideas generales para pensar espacios de juego, lectura y descanso. Contenido demostrativo.</p></div>' +
       '<figure class="head-img">' + img('assets/demo/cat-inspiracion.svg', 'Inspiración (ilustración demostrativa)', 1200, 560, true) + '</figure></div></section>' +
       '<div class="wrap block">' + decoField() + '<div class="grid grid-3">' + CL.data.articles.map(articleCard).join('') + '</div></div>';
     return { title: 'Inspiración', description: 'Ideas generales para el hogar. Contenido demostrativo.', html: html };
@@ -809,27 +800,27 @@
   // ============================================================
   V.faq = function () {
     var html = '<div class="wrap block page-simple faq">' + crumbs([{ name: 'Inicio', path: '/' }, { name: 'Preguntas frecuentes' }]) + '<h1>Preguntas frecuentes</h1>' +
-      '<p class="note">Respuestas de ejemplo. Las que figuran como pendientes las completa Claré.</p>' +
+      '<p class="note">Respuestas de ejemplo. Las que figuran como pendientes las completa MOONDOS.</p>' +
       CL.data.faq.map(function (f) {
-        return '<details class="qa" data-reveal><summary>' + esc(f.q) + icon('chevron', 'qa-ic') + '</summary><p' + (f.a ? '' : ' class="pending"') + '>' + esc(f.a || 'Respuesta pendiente de confirmar por Claré.') + '</p></details>';
+        return '<details class="qa" data-reveal><summary>' + esc(f.q) + icon('chevron', 'qa-ic') + '</summary><p' + (f.a ? '' : ' class="pending"') + '>' + esc(f.a || 'Respuesta pendiente de confirmar por MOONDOS.') + '</p></details>';
       }).join('') + '</div>';
     return { title: 'Preguntas frecuentes', description: 'Preguntas frecuentes sobre pedidos, pagos y envíos.', html: html };
   };
   V.nosotros = function () {
-    var html = '<div class="wrap">' + crumbs([{ name: 'Inicio', path: '/' }, { name: 'Nosotros' }]) + '</div>' + aboutCard({ h: 'h1', eager: true, title: 'Sobre Claré', text: 'Contenido demostrativo y editable. La historia, los valores y el equipo de Claré se cargan cuando la marca los comparta.', pre: '' });
-    return { title: 'Nosotros', description: 'Sobre Claré. Contenido demostrativo.', html: html, mount: function (root) { aboutMotion(root); } };
+    var html = '<div class="wrap">' + crumbs([{ name: 'Inicio', path: '/' }, { name: 'Nosotros' }]) + '</div>' + aboutCard({ h: 'h1', eager: true, title: 'Sobre MOONDOS', text: 'Contenido demostrativo y editable. La historia, los valores y el equipo de MOONDOS se cargan cuando la marca los comparta.', pre: '' });
+    return { title: 'Nosotros', description: 'Sobre MOONDOS. Contenido demostrativo.', html: html, mount: function (root) { aboutMotion(root); } };
   };
   V.privacidad = function () {
     var html = '<div class="wrap block page-simple">' + crumbs([{ name: 'Inicio', path: '/' }, { name: 'Privacidad' }]) + '<h1>Política de privacidad</h1>' +
-      '<p class="notice">Marcador de posición. Esta política debe ser redactada y revisada por Claré antes de publicar la tienda. No es texto legal final.</p>' +
+      '<p class="notice">Marcador de posición. Esta política debe ser redactada y revisada por MOONDOS antes de publicar la tienda. No es texto legal final.</p>' +
       '<h2>Cómo funciona esta demo</h2><ul class="plain"><li>El carrito y los guardados se almacenan en tu dispositivo (solo productos y cantidades).</li>' +
       '<li>La dirección y el teléfono no se guardan en tu dispositivo.</li>' +
-      '<li>Al enviar un pedido, la web intenta pasar los datos del formulario a Claré en segundo plano y prepara un mensaje de WhatsApp sin tu dirección ni tu teléfono.</li></ul></div>';
+      '<li>Al enviar un pedido, la web intenta pasar los datos del formulario a MOONDOS en segundo plano y prepara un mensaje de WhatsApp sin tu dirección ni tu teléfono.</li></ul></div>';
     return { title: 'Privacidad', description: 'Política de privacidad (marcador de posición).', html: html };
   };
 
   V.notFound = function () {
-    return { title: 'No encontramos la página', description: 'Página no encontrada.', html: '<div class="wrap block page-simple">' + emptyState('No encontramos esa página', 'Puede que el enlace haya cambiado.', '<a class="btn"' + link('/') + '>Ir al inicio</a><a class="btn btn-soft"' + link('/muebles') + '>Ver productos</a>') + '</div>' };
+    return { title: 'No encontramos la página', description: 'Página no encontrada.', html: '<div class="wrap block page-simple">' + emptyState('No encontramos esa página', 'Puede que el enlace haya cambiado.', '<a class="btn"' + link('/') + '>Ir al inicio</a><a class="btn btn-soft"' + link('/productos') + '>Ver productos</a>') + '</div>' };
   };
   V.error = function () {
     return { title: 'Algo salió mal', description: 'Error.', html: '<div class="wrap block page-simple">' + emptyState('Algo salió mal', 'Recargá la página o volvé al inicio.', '<button type="button" class="btn" onclick="location.reload()">Recargar</button><a class="btn btn-soft"' + link('/') + '>Ir al inicio</a>') + '</div>' };
@@ -840,9 +831,8 @@
 
   // ---------- rutas ----------
   CL.route(/^\/$/, V.home);
-  CL.route(/^\/muebles$/, V.muebles);
-  CL.route(/^\/juguetes$/, V.juguetes);
-  CL.route(/^\/combos$/, V.combos);
+  CL.route(/^\/productos$/, V.productos);
+  ['bazar', 'aqui-y-ahora', 'libreria', 'textil', 'mix', 'navidad'].forEach(function (id) { CL.route(new RegExp('^\\/' + id + '$'), categoryView(id)); });
   CL.route(/^\/coleccion\/([a-z0-9-]+)$/, V.coleccion);
   CL.route(/^\/por-etapa$/, V.porEtapa);
   CL.route(/^\/inspiracion$/, V.inspiracion);

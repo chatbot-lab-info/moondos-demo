@@ -6,14 +6,14 @@
   <base href="/">
   <script>if (location.protocol === 'file:' || /\.github\.io$/.test(location.hostname)) { var b = document.querySelector('base'); if (b) b.remove(); }</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Claré · Muebles y juguetes Montessori (demo)</title>
-  <meta name="description" content="Claré: muebles y juguetes Montessori para chicos. Armá tu pedido y continuá por WhatsApp. Sitio de demostración.">
+  <title>MOONDOS · Regalería (demo)</title>
+  <meta name="description" content="MOONDOS: regalería en Santa Fe. Armá tu pedido y continuá por WhatsApp. Sitio de demostración.">
   <!-- Demo: no indexar. app.js saca esta etiqueta cuando STORE_MODE = 'produccion'. -->
   <meta name="robots" content="noindex, nofollow" id="meta-robots">
   <meta name="theme-color" content="#A1AD96">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Claré · Muebles y juguetes Montessori">
-  <meta property="og:description" content="Armá tu pedido y continuá por WhatsApp con Claré.">
+  <meta property="og:title" content="MOONDOS · Regalería">
+  <meta property="og:description" content="Armá tu pedido y continuá por WhatsApp con MOONDOS.">
   <link rel="icon" href="assets/demo/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/quicksand-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/lenis.css">
@@ -41,34 +41,13 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
 
-        <a class="logo" href="/" data-r="/" aria-label="Claré, ir al inicio">
-          <svg class="logo-svg" id="logo-word" viewBox="0 0 422 181" role="img" aria-label="Claré"><use href="#clare-logo"/></svg>
+        <a class="logo" href="/" data-r="/" aria-label="MOONDOS, ir al inicio">
+          <svg class="logo-svg" id="logo-word" viewBox="0 0 422 181" role="img" aria-label="MOONDOS"><use href="#clare-logo"/></svg>
         </a>
 
         <nav class="main-nav" aria-label="Principal">
           <ul>
-            <li class="has-sub" id="nav-muebles">
-              <a href="/muebles" data-r="/muebles">Muebles</a>
-              <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-muebles" aria-label="Mostrar subgrupos de Muebles">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-              <ul class="submenu" id="sub-muebles"></ul>
-            </li>
-            <li class="has-sub" id="nav-juguetes">
-              <a href="/juguetes" data-r="/juguetes">Juguetes</a>
-              <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-juguetes" aria-label="Mostrar subgrupos de Juguetes">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-              <ul class="submenu" id="sub-juguetes"></ul>
-            </li>
-            <li><a href="/combos" data-r="/combos">Combos</a></li>
-            <li class="has-sub" id="nav-inspiracion">
-              <a href="/inspiracion" data-r="/inspiracion">Inspiración</a>
-              <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-inspiracion" aria-label="Mostrar ideas de Inspiración">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-              <ul class="submenu" id="sub-inspiracion"></ul>
-            </li>
+            <!-- las categorías se arman desde js/app.js con los datos de la web -->
           </ul>
         </nav>
 
@@ -96,7 +75,7 @@
   <div class="scrim" id="scrim" hidden></div>
   <aside class="menu-panel" id="menu-panel" role="dialog" aria-modal="true" aria-label="Menú" hidden data-lenis-prevent>
     <div class="menu-head">
-      <svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="Claré"><use href="#clare-logo"/></svg>
+      <svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="MOONDOS"><use href="#clare-logo"/></svg>
       <button class="icon-btn" id="menu-close" type="button" aria-label="Cerrar menú">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </button>
@@ -109,7 +88,7 @@
     <div class="search-box" data-lenis-prevent>
       <form id="search-form" role="search" autocomplete="off">
         <label class="sr-only" for="search-input">Buscar productos</label>
-        <input id="search-input" type="search" placeholder="Buscar muebles, juguetes, combos…" maxlength="60" enterkeyhint="search">
+        <input id="search-input" type="search" placeholder="Buscar productos…" maxlength="60" enterkeyhint="search">
         <button class="btn btn-small" type="submit">Buscar</button>
         <button class="icon-btn" id="search-close" type="button" aria-label="Cerrar búsqueda">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>

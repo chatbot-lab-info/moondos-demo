@@ -39,8 +39,7 @@
       if (c.subcategories.length) out += '<ul class="m-sub">' + c.subcategories.map(function (s) { return '<li><a' + link('/' + c.slug + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('') + '</ul>';
       out += '</div>';
     });
-    out += '<div class="m-group"><a class="m-link"' + link('/inspiracion') + '>Inspiración</a><ul class="m-sub">' + D.articles.map(function (a) { return '<li><a' + link('/inspiracion/' + a.slug) + '>' + esc(a.title) + '</a></li>'; }).join('') + '</ul></div>';
-    out += '<div class="m-group m-extra"><a' + link('/por-etapa') + '>Por etapa</a><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
+    out += '<div class="m-group m-extra"><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a><a' + link('/nosotros') + '>Nosotros</a></div>';
     return out;
   }
   function placeMenu(opener) {
@@ -126,15 +125,15 @@
   // ---------- footer ----------
   function paintFooter() {
     var D = CL.data;
-    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="Claré"><use href="#clare-logo"/></svg>' +
-      '<p>Muebles y juguetes Montessori. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
+    $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><svg class="logo-svg logo-dark" viewBox="0 0 422 181" role="img" aria-label="MOONDOS"><use href="#clare-logo"/></svg>' +
+      '<p>Regalería en Santa Fe. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
       '<nav class="foot-col" aria-label="Tienda"><h2>Tienda</h2><ul>' + D.categories.map(function (c) { return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>'; }).join('') +
-      '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li><a' + link('/por-etapa') + '>Por etapa</a></li></ul></nav>' +
+      '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li></li></ul></nav>' +
       '<nav class="foot-col" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a></li><li><a' + link('/nosotros') + '>Nosotros</a></li><li><a' + link('/privacidad') + '>Privacidad</a></li></ul></nav>' +
-      '<div class="foot-col"><h2>Contacto</h2><ul><li><a href="' + esc('https://wa.me/' + (cfg.WHATSAPP_PHONE_E164 || '').replace(/\D/g, '') + '?text=' + encodeURIComponent('Hola Claré, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' +
+      '<div class="foot-col"><h2>Contacto</h2><ul><li><a href="' + esc('https://wa.me/' + (cfg.WHATSAPP_PHONE_E164 || '').replace(/\D/g, '') + '?text=' + encodeURIComponent('Hola MOONDOS, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' +
       (cfg.CONTACT_EMAIL ? '<li><a href="mailto:' + esc(cfg.CONTACT_EMAIL) + '">' + esc(cfg.CONTACT_EMAIL) + '</a></li>' : '') +
       (cfg.INSTAGRAM_URL ? '<li><a href="' + esc(cfg.INSTAGRAM_URL) + '" rel="noopener">Instagram</a></li>' : '') + '</ul></div></div>' +
-      '<p class="foot-legal">© ' + new Date().getFullYear() + ' Claré' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo') + '</p>';
+      '<p class="foot-legal">© ' + new Date().getFullYear() + ' MOONDOS' + (cfg.STORE_MODE === 'produccion' ? '' : ' · demo') + '</p>';
     CL.fixLinks($('#site-footer'));
   }
 
@@ -287,10 +286,13 @@
     };
     CL.svc.catalogApi.load().then(function (data) {
       CL.setData(data); CL.store.init();
-      ['muebles', 'juguetes'].forEach(function (id) {
-        $('#sub-' + id).innerHTML = '<li><a' + link('/' + id) + '>Ver todo</a></li>' + CL.catById(id).subcategories.map(function (s) { return '<li><a' + link('/' + id + '?sub=' + s.id) + '>' + esc(s.name) + '</a></li>'; }).join('');
-      });
-      $('#sub-inspiracion').innerHTML = '<li><a' + link('/inspiracion') + '>Ver todas las ideas</a></li>' + CL.data.articles.map(function (a) { return '<li><a' + link('/inspiracion/' + a.slug) + '>' + esc(a.title) + '</a></li>'; }).join('');
+      $('.main-nav ul').innerHTML = CL.data.categories.map(function (c) {
+        var subs = c.subcategories.filter(function (sc) { return CL.data.products.some(function (p) { return p.categoryId === c.id && p.subcategoryId === sc.id; }); });
+        if (!subs.length) return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>';
+        return '<li class="has-sub" id="nav-' + c.id + '"><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a>' +
+          '<button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-' + c.id + '" aria-label="Mostrar subgrupos de ' + esc(c.name) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>' +
+          '<ul class="submenu" id="sub-' + c.id + '"><li><a' + link('/' + c.slug) + '>Ver todo</a></li>' + subs.map(function (sc) { return '<li><a' + link('/' + c.slug + '?sub=' + sc.id) + '>' + esc(sc.name) + '</a></li>'; }).join('') + '</ul></li>';
+      }).join('');
       $('#menu-links').innerHTML = menuLinksHTML();
       CL.fixLinks(document);
       paintFooter();

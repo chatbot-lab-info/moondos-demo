@@ -34,6 +34,13 @@
     });
     var catByName = {};
     base.categories.forEach(function (c) { catByName[norm(c.name)] = c; catByName[norm(c.id)] = c; });
+    Object.keys(base.alias || {}).forEach(function (k) { var c = catByName[norm(base.alias[k])]; if (c && !catByName[norm(k)]) catByName[norm(k)] = c; });
+    var featuredNames = {}; (base.featured || []).forEach(function (n) { featuredNames[norm(n)] = true; });
+    function subIdFor(cat, r) {
+      var n = norm(r.subcategoria), f = null; if (!n) return null;
+      (cat.subcategories || []).forEach(function (s) { if (norm(s.name) === n) f = s.id; });
+      return f;
+    }
     function availability(r) { return r.estadoStock === 'sin_stock' ? 'agotado' : (r.estadoStock === 'proximamente' ? 'proximamente' : 'disponible'); }
     function isDemoUrl(u) { return !u || /\/assets\/demo\//.test(u); }
 
@@ -55,12 +62,12 @@
       if (used[id]) return;
       var r = rows[id], cat = catByName[norm(r.categoria)]; if (!cat) return;   // categoría que la web no tiene: no se muestra
       out.push({
-        id: 'panel-' + id, slug: id, name: r.nombre, shortDescription: '', description: '',
-        categoryId: cat.id, subcategoryId: null, priceARS: Number(r.precio) || 0, currency: 'ARS',
+        id: 'panel-' + id, slug: id, name: r.nombre, shortDescription: r.descripcion || '', description: r.descripcion || '',
+        categoryId: cat.id, subcategoryId: subIdFor(cat, r), priceARS: Number(r.precio) || 0, currency: 'ARS',
         images: [{ url: r.imagenUrl || 'assets/demo/ambiente-01.svg', alt: r.nombre }],
         variants: [], bundleItems: [], collectionTags: [],
         specifications: { materials: null, dimensions: null, finish: null, assembly: null, care: null, recommendedStage: null },
-        availability: availability(r), featured: false, status: 'panel', updatedAt: null, sortOrder: 1000 + i
+        availability: availability(r), featured: !!featuredNames[norm(r.nombre)], status: 'panel', updatedAt: null, sortOrder: 1000 + i
       });
     });
     var data = {}; for (var k in base) if (Object.prototype.hasOwnProperty.call(base, k)) data[k] = base[k];
