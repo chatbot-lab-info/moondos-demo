@@ -128,7 +128,7 @@
     $('#site-footer').innerHTML = '<div class="wrap foot-inner"><div class="foot-brand"><img class="logo-svg logo-dark" src="assets/brand/moondos-logo-verde.png" alt="MOONDOS" width="900" height="245">' +
       '<p>Regalería en Santa Fe. ' + (cfg.STORE_MODE === 'produccion' ? '' : 'Sitio de demostración: productos, precios e imágenes son de ejemplo.') + '</p></div>' +
       '<nav class="foot-col" aria-label="Tienda"><h2>Tienda</h2><ul>' + D.categories.map(function (c) { return '<li><a' + link('/' + c.slug) + '>' + esc(c.name) + '</a></li>'; }).join('') +
-      '<li><a' + link('/inspiracion') + '>Inspiración</a></li><li></li></ul></nav>' +
+      '<li></li></ul></nav>' +
       '<nav class="foot-col" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a' + link('/preguntas-frecuentes') + '>Preguntas frecuentes</a></li><li><a' + link('/nosotros') + '>Nosotros</a></li><li><a' + link('/privacidad') + '>Privacidad</a></li></ul></nav>' +
       '<div class="foot-col"><h2>Contacto</h2><ul><li><a href="' + esc('https://wa.me/' + (cfg.WHATSAPP_PHONE_E164 || '').replace(/\D/g, '') + '?text=' + encodeURIComponent('Hola MOONDOS, quisiera hacer una consulta.')) + '">WhatsApp</a></li>' +
       (cfg.CONTACT_EMAIL ? '<li><a href="mailto:' + esc(cfg.CONTACT_EMAIL) + '">' + esc(cfg.CONTACT_EMAIL) + '</a></li>' : '') +

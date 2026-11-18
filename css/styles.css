@@ -227,10 +227,12 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
 .hero-shapes.front { z-index: 2; }
 .hero-photo { position: absolute; z-index: 1; left: 46.36%; width: 47.65%; top: 4.16%; height: 90.24%; }
 .hero-frame { width: 100%; height: 100%; overflow: hidden; background: var(--sand-l); clip-path: url(#hero-photo-clip); }
-.hero-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 66% 50%; transform: translate3d(0, calc(var(--sy) * 14px), 0) scale(1.04); }
+.hero-track { display: flex; width: 100%; height: 100%; transition: transform 1s var(--ease); will-change: transform; }
+.hero-frame img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .hero-dots { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 8px; z-index: 3; }
 .hero-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--brown); opacity: .35; }
-.hero-dots i:nth-child(2) { background: var(--terra-d); opacity: .8; }
+.hero-dots i { transition: opacity .4s, background .4s; }
+.hero-dots i.on { background: var(--terra-d); opacity: .8; }
 @media (prefers-reduced-motion: no-preference) {
   /* El bloque de texto entra desde el borde izquierdo de la pantalla */
   .js .hero-copy h1 { animation: fromLeft 1s var(--ease) both .08s; }
@@ -333,8 +335,8 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
 
 /* ---------- Bloque de marca / franja ---------- */
 /* ---------- Sobre Claré (réplica del moodboard) ---------- */
-.about { width: calc(100% - 2 * var(--edge)); max-width: 1380px; margin: clamp(40px, 6vw, 84px) auto; }
-.about-card { position: relative; container-type: inline-size; aspect-ratio: 1087 / 485; border-radius: clamp(22px, 2.8cqw, 34px); background: #F6ECDF; overflow: clip; box-shadow: var(--shadow); isolation: isolate; }
+.about { width: 100%; max-width: none; margin: clamp(40px, 6vw, 84px) 0; }
+.about-card { position: relative; container-type: inline-size; aspect-ratio: 1087 / 485; border-radius: 0; background: #F6ECDF; overflow: clip; isolation: isolate; }
 .ab { position: absolute; inset: 0; background-size: 100% 100%; background-repeat: no-repeat; z-index: 0; }
 .ab-sandb { background-image: url(../assets/brand/about-sandb.svg); --fx: 0; --fy: 14%; }
 .ab-terra { background-image: url(../assets/brand/about-terra.svg); --fx: 18%; --fy: 0; }
@@ -354,8 +356,8 @@ code { background: var(--sand-l); padding: 1px 6px; border-radius: 6px; }
 .reveal-ready .about-card .about-copy { opacity: 0; translate: -6% 0; transition: opacity .9s var(--ease) .3s, translate 1.2s var(--ease) .3s; }
 .reveal-ready .about-on .ab, .reveal-ready .about-on .about-photo, .reveal-ready .about-on .about-copy { opacity: 1; translate: 0 0; scale: 1; }
 @media (max-width: 860px) {
-  .about { width: calc(100% - 2 * var(--edge)); }
-  .about-card { aspect-ratio: auto; display: flex; flex-direction: column; padding-top: 26px; border-radius: 28px; }
+  .about { width: 100%; }
+  .about-card { aspect-ratio: auto; display: flex; flex-direction: column; padding-top: 26px; border-radius: 0; }
   .ab { display: none; }
   .about-card::before { content: ''; position: absolute; right: -16%; top: 2%; width: 66%; aspect-ratio: 1.05; background: #B57D61; border-radius: 52% 48% 44% 56% / 58% 46% 54% 42%; z-index: 0; }
   .about-card::after { content: ''; position: absolute; left: -12%; top: -6%; width: 46%; aspect-ratio: 1; background: var(--sand); border-radius: 50% 50% 54% 46% / 56% 48% 52% 44%; z-index: 0; }

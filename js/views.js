@@ -135,14 +135,14 @@
     var html =
       '<section class="hero" id="hero" aria-labelledby="hero-title">' +
         '<div class="hero-shapes" aria-hidden="true"><span class="hb hb-swirl"></span><span class="hb hb-sandr"></span><span class="hb hb-sand"></span><span class="hb hb-sage"></span></div>' +
-        '<div class="hero-photo"><div class="hero-frame">' + img('assets/hero/hero-photo.jpg', 'Niño jugando con bloques de madera sobre una mesa baja', 1500, 1120, true) + '</div></div>' +
+        '<div class="hero-photo"><div class="hero-frame"><div class="hero-track">' + HERO_SLIDES.map(function (h, i) { return img(h[0], h[1], 600, 600, i === 0); }).join('') + '</div></div></div>' +
         '<div class="hero-shapes front" aria-hidden="true"><span class="hb hb-terra"></span><span class="hb hb-sky"></span><span class="hb hb-terral"></span></div>' +
         '<div class="hero-inner">' +
           '<div class="hero-copy"><h1 id="hero-title">Regalos para sacar sonrisas</h1>' +
             '<p class="lead">Bazar, aromas, librería, textil y mucho más. Desde 2019</p>' +
             '<div class="hero-cta"><a class="btn btn-lg" href="#destacados" data-scroll="#destacados">Ver productos</a><a class="btn btn-ghost btn-lg"' + link('/navidad') + '>Calendario de adviento</a></div></div>' +
         '</div>' +
-        '<div class="hero-dots" aria-hidden="true"><i></i><i></i><i></i></div>' +
+        '<div class="hero-dots" aria-hidden="true">' + HERO_SLIDES.map(function (h, i) { return '<i' + (i === 0 ? ' class="on"' : '') + '></i>'; }).join('') + '</div>' +
       '</section>' +
 
       '<section class="wrap block" id="destacados" aria-labelledby="dest-t">' + head('Productos destacados', '/productos', 'Ver todos los productos').replace('<h2>', '<h2 id="dest-t">') + grid(featured) + '</section>' +
@@ -159,7 +159,7 @@
       '</ul></section>';
     return {
       title: 'Regalería en Santa Fe', description: 'Bazar, aromas, librería, textil y más. Armá tu pedido y continuá por WhatsApp con MOONDOS.', html: html,
-      mount: function (root) { heroMotion(root); aboutMotion(root); }
+      mount: function (root) { heroMotion(root); heroSlider(root); aboutMotion(root); }
     };
   };
 
@@ -170,6 +170,28 @@
   }
 
   // Movimiento del hero: parallax leve (puntero en escritorio, scroll en general). Respeta movimiento reducido.
+  var HERO_SLIDES = [
+    ['assets/catalogo/calendario-de-adviento-2026-c7zsr.webp', 'Calendario de adviento 2026 x 25 regalos'],
+    ['assets/catalogo/set-navideno-difusor-y-vela-aromatica-6aus2.webp', 'Set navideño de difusor y vela aromática'],
+    ['assets/catalogo/calendario-de-adviento-2026-x10-regalos-1qfz4.webp', 'Calendario de adviento 2026 x 10 regalos'],
+    ['assets/catalogo/set-navideno-vela-aromatizador-colgante-difusor-bsli2.webp', 'Set navideño de vela, aromatizador colgante y difusor']
+  ];
+  function heroSlider(root) {
+    var hero = $('#hero', root); if (!hero) return;
+    var track = $('.hero-track', hero), dots = hero.querySelectorAll('.hero-dots i'), n = HERO_SLIDES.length, cur = 0, timer = null, visible = true;
+    if (!track || n < 2) return;
+    function go(i) {
+      cur = (i + n) % n; track.style.transform = 'translate3d(' + (-100 * cur) + '%,0,0)';
+      for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('on', k === cur);
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { stop(); if (CL.reduce() || !visible || document.hidden) return; timer = setInterval(function () { go(cur + 1); }, 3500); }
+    var io = null;
+    if ('IntersectionObserver' in window) { io = new IntersectionObserver(function (en) { visible = en[0].isIntersecting; start(); }); io.observe(hero); }
+    document.addEventListener('visibilitychange', start);
+    start();
+    CL.onCleanup(function () { stop(); document.removeEventListener('visibilitychange', start); if (io) io.disconnect(); });
+  }
   function heroMotion(root) {
     var hero = $('#hero', root); if (!hero || CL.reduce() || CL.lowPower()) return;
     var visible = true, ticking = false, px = 0, py = 0, sy = 0;
